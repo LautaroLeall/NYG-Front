@@ -7,7 +7,7 @@ const Historia = () => {
     <div className="w-full bg-white pb-24">
       {/* Cabecera / Hero de Historia */}
       <div 
-        className="relative h-[40vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed" 
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed" 
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
