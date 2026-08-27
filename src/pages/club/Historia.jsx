@@ -7,7 +7,7 @@ const Historia = () => {
     <div className="w-full bg-white pb-24">
       {/* Cabecera / Hero de Historia */}
       <div 
-        className="relative h-[50vh] min-h-100 flex items-center justify-center bg-center bg-cover" 
+        className="relative h-[40vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed" 
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
@@ -96,7 +96,7 @@ const Historia = () => {
             
             <div className="flex flex-wrap justify-center gap-6 not-prose mb-10">
               {/* Jugador 1 */}
-              <div className="w-full sm:w-[30%] min-w-[250px] bg-gray-50 rounded-xl p-6 text-center border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-full sm:w-[30%] min-w-62.5 bg-gray-50 rounded-xl p-6 text-center border border-gray-100 hover:shadow-lg transition-shadow">
                 <img 
                   src="/omarHasan.png" 
                   alt="Omar Hasan" 
@@ -108,7 +108,7 @@ const Historia = () => {
               </div>
 
               {/* Jugador 2 */}
-              <div className="w-full sm:w-[30%] min-w-[250px] bg-gray-50 rounded-xl p-6 text-center border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-full sm:w-[30%] min-w-62.5 bg-gray-50 rounded-xl p-6 text-center border border-gray-100 hover:shadow-lg transition-shadow">
                 <img 
                   src="/gabrielAscarate.png" 
                   alt="Gabriel Ascárate" 
@@ -120,7 +120,7 @@ const Historia = () => {
               </div>
 
               {/* Jugador 3 */}
-              <div className="w-full sm:w-[30%] min-w-[250px] bg-gray-50 rounded-xl p-6 text-center border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-full sm:w-[30%] min-w-62.5 bg-gray-50 rounded-xl p-6 text-center border border-gray-100 hover:shadow-lg transition-shadow">
                 <img 
                   src="/javierDiaz.png" 
                   alt="Javier Díaz" 
@@ -132,7 +132,7 @@ const Historia = () => {
               </div>
               
               {/* Jugador 4 */}
-              <div className="w-full sm:w-[30%] min-w-[250px] bg-gray-50 rounded-xl p-6 text-center border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-full sm:w-[30%] min-w-62.5 bg-gray-50 rounded-xl p-6 text-center border border-gray-100 hover:shadow-lg transition-shadow">
                 <img 
                   src="/gonzaloGarcia.png" 
                   alt="Gonzalo García" 
