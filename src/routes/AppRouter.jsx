@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import ClubHub from "../pages/club/ClubHub";
 import Historia from "../pages/club/Historia";
 import Timeline from "../pages/club/Timeline";
+import Palmares from "../pages/club/Palmares";
 
 const AppRouter = () => {
   return (
@@ -16,7 +17,7 @@ const AppRouter = () => {
           <Route path="/el-club/historia" element={<Historia />} />
           {/* Futuras rutas de la Épica 2 */}
           <Route path="/el-club/timeline" element={<Timeline />} />
-          {/* <Route path="/el-club/palmares" element={<Palmares />} /> */}
+          <Route path="/el-club/palmares" element={<Palmares />} />
           <Route
             path="*"
             element={
