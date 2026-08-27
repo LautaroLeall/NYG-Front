@@ -16,8 +16,9 @@ const MainLayout = () => {
         <Outlet />
       </main>
 
+      {/* NO SE UTILIZARA POR AHORA */}
       {/* Footer Institucional */}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
