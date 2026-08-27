@@ -66,7 +66,7 @@ const Timeline = () => {
     <div className="w-full bg-gray-50 pb-32 overflow-hidden">
       {/* Parallax Hero */}
       <div
-        className="relative h-[40vh] min-h-87.5 flex items-center justify-center bg-center bg-cover"
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover"
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
