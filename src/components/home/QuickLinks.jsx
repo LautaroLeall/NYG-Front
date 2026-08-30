@@ -5,25 +5,25 @@ const LINKS = [
   {
     title: "Planteles",
     icon: <Users size={32} />,
-    to: "/planteles",
+    to: "/rugby/plantel-superior",
     color: "bg-nyg-red text-white",
   },
   {
     title: "Estadísticas",
     icon: <BarChart2 size={32} />,
-    to: "/estadisticas",
+    to: "/rugby/estadisticas",
     color: "bg-white text-nyg-blue border border-gray-200",
   },
   {
     title: "Posiciones",
     icon: <Trophy size={32} />,
-    to: "/posiciones",
+    to: "/rugby/posiciones",
     color: "bg-white text-nyg-blue border border-gray-200",
   },
   {
     title: "Galería",
     icon: <ImageIcon size={32} />,
-    to: "/galeria",
+    to: "/el-club/instalaciones",
     color: "bg-nyg-blue text-white",
   },
 ];
