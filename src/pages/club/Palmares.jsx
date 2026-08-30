@@ -16,25 +16,10 @@ const ANUAL_YEARS = [
 ];
 const REGIONAL_YEARS = ["2017"];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.2 } },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.9 },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.6, type: "spring", bounce: 0.4 },
-  },
-};
-
 const Palmares = () => {
   return (
-    <div className="w-full bg-gray-50 pb-32">
-      {/* Cabecera / Hero Unificada */}
+    <div className="w-full bg-white pb-20">
+      {/* Cabecera / Hero alineado con Historia */}
       <div
         className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
         style={{ backgroundImage: "url('/img-club5.png')" }}
@@ -57,6 +42,7 @@ const Palmares = () => {
         </motion.div>
       </div>
 
+      {/* Contenido sin cards */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
         <Link
           to="/el-club"
@@ -65,72 +51,62 @@ const Palmares = () => {
           <ArrowLeft size={20} /> Volver a El Club
         </Link>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-        >
-          {/* Tarjeta 1: Campeonato Anual */}
+        {/* Contenedor Abierto tipo Museo */}
+        <div className="space-y-32">
+          {/* Campeonato Anual Tucumano */}
           <motion.div
-            variants={cardVariants}
-            whileHover={{ y: -10 }}
-            className="bg-white rounded-3xl p-8 sm:p-10 shadow-xl border-t-8 border-nyg-gold relative overflow-hidden flex flex-col items-center text-center transition-all duration-300"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col md:flex-row items-center gap-12 md:gap-20 border-b border-gray-100 pb-24"
           >
-            {/* Fondo decorativo sutil */}
-            <Trophy
-              className="absolute -bottom-10 -right-10 text-gray-50 opacity-40 transform -rotate-12"
-              size={250}
-            />
-
-            <div className="relative z-10 w-full flex flex-col items-center">
-              {/* Icono Flotante */}
+            <div className="w-full md:w-1/3 flex flex-col items-center justify-center text-center">
               <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 3,
-                  ease: "easeInOut",
-                }}
-                className="w-24 h-24 bg-linear-to-br from-yellow-50 to-yellow-100 rounded-full flex items-center justify-center text-nyg-gold mb-6 shadow-inner"
+                animate={{ rotateY: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="mb-6 relative"
               >
-                <Trophy size={48} />
+                <div className="absolute inset-0 bg-nyg-gold opacity-20 blur-2xl rounded-full"></div>
+                <Trophy
+                  size={140}
+                  strokeWidth={1}
+                  className="text-nyg-gold relative z-10"
+                />
               </motion.div>
-
-              <h2 className="text-3xl font-black text-nyg-blue leading-tight mb-2">
-                Campeonato <br />
-                Anual Tucumano
+              <h2 className="text-8xl md:text-9xl font-black text-gray-100 tracking-tighter -mt-6 relative z-0">
+                10
               </h2>
-              <p className="text-nyg-gold font-bold uppercase tracking-widest text-sm mb-6">
-                10 Títulos
+              <p className="text-nyg-blue font-black tracking-widest uppercase text-xl md:text-2xl -mt-8 relative z-10">
+                Títulos
               </p>
+            </div>
 
-              <div className="flex flex-wrap justify-center gap-1.5 mb-6">
+            <div className="w-full md:w-2/3">
+              <div className="flex flex-wrap gap-2 mb-6">
                 {[...Array(10)].map((_, i) => (
-                  <motion.div
+                  <Star
                     key={i}
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1, type: "spring" }}
-                  >
-                    <Star className="text-nyg-gold fill-nyg-gold" size={22} />
-                  </motion.div>
+                    className="text-nyg-gold fill-nyg-gold"
+                    size={24}
+                  />
                 ))}
               </div>
-
-              <p className="text-gray-500 mb-8 text-sm leading-relaxed px-4">
+              <h3 className="text-4xl md:text-6xl font-black text-nyg-blue uppercase tracking-tight mb-6 leading-none">
+                Campeonato <br />
+                <span className="text-nyg-red">Anual Tucumano</span>
+              </h3>
+              <p className="text-xl md:text-2xl text-gray-500 font-light leading-relaxed mb-10">
                 El certamen más prestigioso y tradicional de la provincia nos ha
                 visto coronarnos campeones en 10 ocasiones, marcando distintas
-                épocas doradas.
+                épocas doradas de la institución.
               </p>
 
-              <div className="flex flex-wrap justify-center gap-2 mt-auto w-full">
+              <div className="flex flex-wrap gap-x-6 gap-y-4">
                 {ANUAL_YEARS.map((year, idx) => (
                   <span
                     key={idx}
-                    className="bg-nyg-blue text-white px-4 py-1.5 text-sm rounded-full font-bold shadow-sm hover:bg-nyg-gold transition-colors cursor-default"
+                    className="text-3xl md:text-4xl font-black text-gray-300 hover:text-nyg-blue transition-colors cursor-default"
                   >
                     {year}
                   </span>
@@ -139,63 +115,54 @@ const Palmares = () => {
             </div>
           </motion.div>
 
-          {/* Tarjeta 2: Torneo Regional */}
+          {/* Torneo Regional del NOA */}
           <motion.div
-            variants={cardVariants}
-            whileHover={{ y: -10 }}
-            className="bg-white rounded-3xl p-8 sm:p-10 shadow-xl border-t-8 border-nyg-red relative overflow-hidden flex flex-col items-center text-center transition-all duration-300"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-20 pb-12"
           >
-            {/* Fondo decorativo sutil */}
-            <Award
-              className="absolute -bottom-10 -left-10 text-gray-50 opacity-40 transform rotate-12"
-              size={250}
-            />
-
-            <div className="relative z-10 w-full flex flex-col items-center h-full">
-              {/* Icono Flotante */}
+            <div className="w-full md:w-1/3 flex flex-col items-center justify-center text-center">
               <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 3.5,
-                  ease: "easeInOut",
-                  delay: 0.5,
-                }}
-                className="w-24 h-24 bg-linear-to-br from-red-50 to-red-100 rounded-full flex items-center justify-center text-nyg-red mb-6 shadow-inner"
+                animate={{ rotateY: -360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="mb-6 relative"
               >
-                <Award size={48} />
+                <div className="absolute inset-0 bg-nyg-red opacity-20 blur-2xl rounded-full"></div>
+                <Award
+                  size={140}
+                  strokeWidth={1}
+                  className="text-nyg-red relative z-10"
+                />
               </motion.div>
-
-              <h2 className="text-3xl font-black text-nyg-blue leading-tight mb-2">
-                Torneo Regional <br />
-                del NOA
+              <h2 className="text-8xl md:text-9xl font-black text-gray-100 tracking-tighter -mt-6 relative z-0">
+                1
               </h2>
-              <p className="text-nyg-red font-bold uppercase tracking-widest text-sm mb-6">
-                1 Título
+              <p className="text-nyg-blue font-black tracking-widest uppercase text-xl md:text-2xl -mt-8 relative z-10">
+                Título
               </p>
+            </div>
 
-              <div className="flex flex-wrap justify-center gap-1.5 mb-6">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3, type: "spring" }}
-                >
-                  <Star className="text-nyg-red fill-nyg-red" size={32} />
-                </motion.div>
+            <div className="w-full md:w-2/3 md:text-right">
+              <div className="flex flex-wrap md:justify-end gap-2 mb-6">
+                <Star className="text-nyg-red fill-nyg-red" size={28} />
               </div>
-
-              <p className="text-gray-500 mb-8 text-sm leading-relaxed px-4">
+              <h3 className="text-4xl md:text-6xl font-black text-nyg-blue uppercase tracking-tight mb-6 leading-none">
+                Torneo Regional <br />
+                <span className="text-nyg-gold">del NOA</span>
+              </h3>
+              <p className="text-xl md:text-2xl text-gray-500 font-light leading-relaxed mb-10 md:ml-auto md:max-w-xl">
                 En 2017 el club alcanzó la gloria máxima a nivel regional,
                 conquistando el noroeste argentino y cortando una sequía de 21
-                años sin festejos.
+                años sin títulos con un equipo inolvidable.
               </p>
 
-              <div className="flex flex-wrap justify-center gap-2 mt-auto w-full">
+              <div className="flex flex-wrap md:justify-end gap-x-6 gap-y-4">
                 {REGIONAL_YEARS.map((year, idx) => (
                   <span
                     key={idx}
-                    className="bg-nyg-red text-white px-8 py-2 text-lg rounded-full font-black shadow-sm hover:bg-nyg-gold transition-colors cursor-default"
+                    className="text-3xl md:text-4xl font-black text-gray-300 hover:text-nyg-red transition-colors cursor-default"
                   >
                     {year}
                   </span>
@@ -203,7 +170,7 @@ const Palmares = () => {
               </div>
             </div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
