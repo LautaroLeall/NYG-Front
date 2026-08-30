@@ -56,7 +56,7 @@ const itemVariants = {
 
 const ClubHub = () => {
   return (
-    <div className="w-full bg-white pb-20">
+    <div className="w-full bg-white pb-25">
       {/* Cabecera / Hero de la sección */}
       <div
         className="relative h-[55vh] min-h-87.5 flex items-center justify-center bg-center bg-cover"

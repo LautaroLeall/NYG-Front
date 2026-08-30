@@ -63,7 +63,7 @@ const MILESTONES = [
 
 const Timeline = () => {
   return (
-    <div className="w-full bg-gray-50 pb-32 overflow-hidden">
+    <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Parallax Hero */}
       <div
         className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover"
