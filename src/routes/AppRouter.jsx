@@ -21,7 +21,6 @@ import Instalaciones from "../pages/club/Instalaciones";
 import Comision from "../pages/club/Comision";
 import CuerpoTecnico from "../pages/club/CuerpoTecnico";
 
-// Admin Imports (Épicas 11 y 12)
 import Login from "../pages/admin/auth/Login";
 import AdminLayout from "../components/layout/AdminLayout";
 import RequireAuth from "../components/admin/RequireAuth";
@@ -31,11 +30,23 @@ import Dashboard from "../pages/admin/Dashboard";
 import PlayerList from "../pages/admin/players/PlayerList";
 import PlayerForm from "../pages/admin/players/PlayerForm";
 
+// Admin - Equipos
+import TeamList from "../pages/admin/teams/TeamList";
+import TeamForm from "../pages/admin/teams/TeamForm";
+
+// Admin - Torneos
+import TournamentList from "../pages/admin/tournaments/TournamentList";
+import TournamentForm from "../pages/admin/tournaments/TournamentForm";
+
+// Admin - Partidos
+import MatchList from "../pages/admin/matches/MatchList";
+import MatchForm from "../pages/admin/matches/MatchForm";
+import MatchResultForm from "../pages/admin/matches/MatchResultForm";
+
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        
         {/* Rutas de Administración Públicas */}
         <Route path="/admin/login" element={<Login />} />
 
@@ -47,18 +58,48 @@ const AppRouter = () => {
             <Route path="planteles" element={<PlayerList />} />
             <Route path="planteles/nuevo" element={<PlayerForm />} />
             <Route path="planteles/editar/:id" element={<PlayerForm />} />
-            
-            <Route path="partidos" element={<div className="text-gray-800 p-4">Sección Partidos</div>} />
-            <Route path="noticias" element={<div className="text-gray-800 p-4">Sección Noticias</div>} />
-            <Route path="alertas" element={<div className="text-gray-800 p-4">Sección Alertas Disciplinarias</div>} />
+
+            {/* Rutas ABM Equipos */}
+            <Route path="equipos" element={<TeamList />} />
+            <Route path="equipos/nuevo" element={<TeamForm />} />
+            <Route path="equipos/editar/:id" element={<TeamForm />} />
+
+            {/* Rutas ABM Torneos */}
+            <Route path="torneos" element={<TournamentList />} />
+            <Route path="torneos/nuevo" element={<TournamentForm />} />
+            <Route path="torneos/editar/:id" element={<TournamentForm />} />
+
+            {/* Rutas ABM Partidos */}
+            <Route path="partidos" element={<MatchList />} />
+            <Route path="partidos/nuevo" element={<MatchForm />} />
+            <Route path="partidos/editar/:id" element={<MatchForm />} />
+            <Route
+              path="partidos/resultado/:id"
+              element={<MatchResultForm />}
+            />
+
+            <Route
+              path="noticias"
+              element={
+                <div className="text-gray-800 p-4">Sección Noticias</div>
+              }
+            />
+            <Route
+              path="alertas"
+              element={
+                <div className="text-gray-800 p-4">
+                  Sección Alertas Disciplinarias
+                </div>
+              }
+            />
           </Route>
         </Route>
 
         {/* Rutas Públicas de la Web */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          
-          {/* Épica 2: El Club */}
+
+          {/* El Club */}
           <Route path="/el-club" element={<ClubHub />} />
           <Route path="/el-club/historia" element={<Historia />} />
           <Route path="/el-club/timeline" element={<Timeline />} />
@@ -66,12 +107,12 @@ const AppRouter = () => {
           <Route path="/el-club/instalaciones" element={<Instalaciones />} />
           <Route path="/el-club/comision" element={<Comision />} />
           <Route path="/el-club/cuerpo-tecnico" element={<CuerpoTecnico />} />
-          
-          {/* Épica 3: Noticias */}
+
+          {/* Noticias */}
           <Route path="/noticias" element={<NewsFeed />} />
           <Route path="/noticias/:slug" element={<NewsArticle />} />
 
-          {/* Bloque Rugby (Épicas 4 a 7) */}
+          {/* Bloque Rugby */}
           <Route path="/rugby" element={<RugbyHub />} />
           <Route path="/rugby/plantel-superior" element={<PlantelSuperior />} />
           <Route path="/rugby/jugador/:id" element={<FichaJugador />} />
@@ -81,7 +122,7 @@ const AppRouter = () => {
           <Route path="/rugby/partido/:id" element={<DetallePartido />} />
           <Route path="/rugby/posiciones" element={<Posiciones />} />
           <Route path="/rugby/estadisticas" element={<Estadisticas />} />
-          
+
           <Route
             path="*"
             element={
