@@ -18,7 +18,7 @@ const REGIONAL_YEARS = ["2017"];
 
 const Palmares = () => {
   return (
-    <div className="w-full bg-white pb-20">
+    <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera / Hero alineado con Historia */}
       <div
         className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
