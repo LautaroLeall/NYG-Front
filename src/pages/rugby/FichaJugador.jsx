@@ -26,7 +26,7 @@ const FichaJugador = () => {
   };
 
   return (
-    <div className="w-full bg-white pb-32">
+    <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera / Hero dividida */}
       <div className="relative bg-nyg-blue overflow-hidden pt-24 min-h-[60vh] flex items-center">
         {/* Fondo decorativo */}

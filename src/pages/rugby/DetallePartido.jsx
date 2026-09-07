@@ -132,7 +132,7 @@ const DetallePartido = () => {
   const isNygWinner = match.homeTeam.score > match.awayTeam.score;
 
   return (
-    <div className="w-full bg-gray-50 pb-32">
+    <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Marcador Principal */}
       <div className="bg-nyg-blue pt-32 pb-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/40"></div>
