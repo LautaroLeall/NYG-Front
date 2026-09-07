@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Trophy } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Trophy } from "lucide-react";
 
 // Mocks
 const TOURNAMENTS = ["Campeonato Anual Tucumano", "General Temporada"];
@@ -90,7 +91,7 @@ const Estadisticas = () => {
   const currentData = STATS_DATA[activeStat] || [];
 
   return (
-    <div className="w-full bg-white pb-32">
+    <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera / Hero Unificada */}
       <div
         className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
@@ -115,6 +116,12 @@ const Estadisticas = () => {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20">
+        <Link
+          to="/rugby"
+          className="inline-flex items-center gap-2 text-nyg-red font-semibold hover:text-red-700 mb-10 transition-colors"
+        >
+          <ArrowLeft size={20} /> Volver a Rugby
+        </Link>
         {/* Selector de Torneo (Pills) */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}

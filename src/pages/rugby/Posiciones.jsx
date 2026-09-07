@@ -1,157 +1,83 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Trophy, Info } from "lucide-react";
-
-// Mocks
-const TOURNAMENTS = [
-  "Campeonato Anual Tucumano",
-  "Torneo Regional del NOA",
-  "Torneo del Interior",
-];
+import { ArrowLeft, Info } from "lucide-react";
+import axios from "../../../api/axiosConfig";
+import dayjs from "dayjs";
 
 // Helper para obtener escudos
-const getShield = (teamName) => {
+const getShield = (teamName, shieldUrl) => {
+  if (shieldUrl) return shieldUrl;
+  
   const shields = {
     "Natación y Gimnasia": "/escudos/nyg.png",
     "Tucumán Rugby": "/escudos/tuc-rugby.png",
     "Lince RC": "/escudos/lince.png",
     Huirapuca: "/escudos/huirapuca.png",
+    "Universitario (T)": "/escudos/universitario-tuc.png",
     Universitario: "/escudos/universitario-tuc.png",
+    "Cardenales RC": "/escudos/cardenales.png",
     Cardenales: "/escudos/cardenales.png",
+    "Jockey Club (R)": "/escudos/jockey-rosario.png",
     "Jockey Club": "/escudos/jockey-rosario.png",
+    "Tucumán Lawn Tennis": "/escudos/tuc-lawn-tenis.png",
     "Lawn Tennis": "/escudos/tuc-lawn-tenis.png",
     "Los Tarcos": "/escudos/tarcos.png",
   };
   return (
     shields[teamName] ||
     "https://ui-avatars.com/api/?name=" +
-      teamName +
+      encodeURIComponent(teamName) +
       "&background=F3F4F6&color=9CA3AF&size=150"
   );
 };
 
-const POSITIONS_DATA = [
-  {
-    pos: 1,
-    team: "Lawn Tennis",
-    played: 14,
-    won: 12,
-    drawn: 0,
-    lost: 2,
-    pf: 450,
-    pa: 210,
-    diff: 240,
-    bo: 9,
-    bd: 1,
-    pts: 58,
-  },
-  {
-    pos: 2,
-    team: "Natación y Gimnasia",
-    played: 14,
-    won: 11,
-    drawn: 1,
-    lost: 2,
-    pf: 410,
-    pa: 230,
-    diff: 180,
-    bo: 8,
-    bd: 1,
-    pts: 55,
-    isOwn: true,
-  },
-  {
-    pos: 3,
-    team: "Tucumán Rugby",
-    played: 14,
-    won: 10,
-    drawn: 0,
-    lost: 4,
-    pf: 390,
-    pa: 250,
-    diff: 140,
-    bo: 7,
-    bd: 2,
-    pts: 49,
-  },
-  {
-    pos: 4,
-    team: "Universitario",
-    played: 14,
-    won: 9,
-    drawn: 1,
-    lost: 4,
-    pf: 320,
-    pa: 280,
-    diff: 40,
-    bo: 5,
-    bd: 1,
-    pts: 44,
-  },
-  {
-    pos: 5,
-    team: "Los Tarcos",
-    played: 14,
-    won: 7,
-    drawn: 0,
-    lost: 7,
-    pf: 310,
-    pa: 310,
-    diff: 0,
-    bo: 4,
-    bd: 3,
-    pts: 35,
-  },
-  {
-    pos: 6,
-    team: "Huirapuca",
-    played: 14,
-    won: 5,
-    drawn: 0,
-    lost: 9,
-    pf: 280,
-    pa: 350,
-    diff: -70,
-    bo: 3,
-    bd: 4,
-    pts: 27,
-  },
-  {
-    pos: 7,
-    team: "Cardenales",
-    played: 14,
-    won: 4,
-    drawn: 0,
-    lost: 10,
-    pf: 240,
-    pa: 400,
-    diff: -160,
-    bo: 2,
-    bd: 3,
-    pts: 21,
-  },
-  {
-    pos: 8,
-    team: "Jockey Club",
-    played: 14,
-    won: 3,
-    drawn: 0,
-    lost: 11,
-    pf: 210,
-    pa: 420,
-    diff: -210,
-    bo: 1,
-    bd: 5,
-    pts: 18,
-  },
-];
-
 const Posiciones = () => {
-  const [selectedTournament, setSelectedTournament] = useState(TOURNAMENTS[0]);
+  const [tournaments, setTournaments] = useState([]);
+  const [selectedTournament, setSelectedTournament] = useState(null);
+  const [standings, setStandings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 1. Cargar Torneos
+  useEffect(() => {
+    const fetchTournaments = async () => {
+      try {
+        const res = await axios.get("/api/tournaments");
+        // Filtramos solo los activos de Rugby Primera para esta vista
+        const activeTournaments = res.data.filter(
+          (t) => !t.isArchived && t.discipline === "Rugby" && t.category === "Primera"
+        );
+        setTournaments(activeTournaments);
+        if (activeTournaments.length > 0) {
+          setSelectedTournament(activeTournaments[0]);
+        }
+      } catch (error) {
+        console.error("Error cargando torneos", error);
+      }
+    };
+    fetchTournaments();
+  }, []);
+
+  // 2. Cargar Tabla de Posiciones cuando cambia el torneo seleccionado
+  useEffect(() => {
+    const fetchStandings = async () => {
+      if (!selectedTournament) return;
+      try {
+        setIsLoading(true);
+        const res = await axios.get(`/api/standings/${selectedTournament._id}`);
+        setStandings(res.data.data || []);
+      } catch (error) {
+        console.error("Error cargando posiciones", error);
+        setStandings([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchStandings();
+  }, [selectedTournament]);
 
   return (
-    <div className="w-full bg-gray-50 pb-32">
+    <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera */}
       <div
         className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
@@ -176,6 +102,12 @@ const Posiciones = () => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
+        <Link
+          to="/rugby"
+          className="inline-flex items-center gap-2 text-nyg-red font-semibold hover:text-red-700 mb-10 transition-colors"
+        >
+          <ArrowLeft size={20} /> Volver a Rugby
+        </Link>
         {/* Selector de Torneo (Tabs / Botones) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
