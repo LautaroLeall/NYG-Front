@@ -165,109 +165,130 @@ const MatchList = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-3">
             {filteredMatches.map((match) => (
               <div
                 key={match._id}
-                className="group relative bg-white border border-gray-100 rounded-3xl p-6 hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col"
+                className="group relative bg-white border border-gray-100 rounded-2xl p-4 hover:shadow-lg hover:border-gray-200 transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4"
               >
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded-md">
+                {/* Izquierda: Fecha, Torneo y Estado */}
+                <div className="flex flex-col gap-2 lg:w-48 shrink-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-gray-400 flex items-center gap-1.5">
+                      <Clock size={14} />
+                      {dayjs(match.date).format("D MMM, HH:mm")}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest truncate">
                     {match.tournament?.name || "Sin torneo"}
                   </span>
-                  {getStatusBadge(match.status)}
+                  <div className="w-fit">{getStatusBadge(match.status)}</div>
                 </div>
 
-                <div className="flex flex-col flex-1 justify-center gap-4 py-2">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3 w-full">
-                      {match.homeTeam?.logo ? (
-                        <img
-                          src={match.homeTeam.logo}
-                          alt={match.homeTeam.name}
-                          className="w-8 h-8 object-contain"
-                        />
-                      ) : (
-                        <div className="w-8 h-8 bg-gray-100 rounded-full shrink-0" />
-                      )}
-                      <span className="font-bold text-gray-800 text-sm truncate flex-1">
-                        {match.homeTeam?.name}
-                      </span>
-                    </div>
-                    {match.status === "Finalizado" && (
-                      <span className="font-black text-xl text-nyg-blue">
-                        {match.homeScore}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3 w-full">
-                      {match.awayTeam?.logo ? (
-                        <img
-                          src={match.awayTeam.logo}
-                          alt={match.awayTeam.name}
-                          className="w-8 h-8 object-contain"
-                        />
-                      ) : (
-                        <div className="w-8 h-8 bg-gray-100 rounded-full shrink-0" />
-                      )}
-                      <span className="font-bold text-gray-800 text-sm truncate flex-1">
-                        {match.awayTeam?.name}
-                      </span>
-                    </div>
-                    {match.status === "Finalizado" && (
-                      <span className="font-black text-xl text-gray-500">
-                        {match.awayScore}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
-                    <Clock size={14} />
-                    {dayjs(match.date).format("D MMM, HH:mm")}
-                  </div>
-
-                  <div className="flex gap-2">
-                    {match.status === "Programado" ? (
-                      <Link
-                        to={`/admin/partidos/resultado/${match._id}`}
-                        className="px-3 py-1 bg-nyg-blue text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors"
-                      >
-                        Cargar Rdo
-                      </Link>
+                {/* Centro: Equipos y Resultado */}
+                <div className="flex-1 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 min-w-0 py-2 lg:py-0 border-y border-gray-50 lg:border-0">
+                  {/* Local */}
+                  <div className="flex items-center justify-end gap-3 flex-1 min-w-0 w-full sm:w-auto">
+                    <span className="font-bold text-gray-800 text-sm truncate text-right">
+                      {match.homeTeam?.name}
+                    </span>
+                    {match.homeTeam?.logo ? (
+                      <img
+                        src={match.homeTeam.logo}
+                        alt=""
+                        className="w-8 h-8 object-contain shrink-0"
+                      />
                     ) : (
+                      <div className="w-8 h-8 bg-gray-100 rounded-full shrink-0" />
+                    )}
+                  </div>
+
+                  {/* Marcador */}
+                  <div className="flex items-center justify-center shrink-0 bg-gray-50 px-5 py-2 rounded-2xl min-w-25">
+                    {match.status === "Finalizado" ? (
+                      <div className="flex items-center gap-3">
+                        <span className="font-black text-xl text-nyg-blue">
+                          {match.homeScore}
+                        </span>
+                        <span className="text-gray-300 font-bold">-</span>
+                        <span className="font-black text-xl text-gray-500">
+                          {match.awayScore}
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="font-bold text-xs text-gray-400 uppercase tracking-widest">
+                        VS
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Visitante */}
+                  <div className="flex items-center justify-start gap-3 flex-1 min-w-0 w-full sm:w-auto">
+                    {match.awayTeam?.logo ? (
+                      <img
+                        src={match.awayTeam.logo}
+                        alt=""
+                        className="w-8 h-8 object-contain shrink-0"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 bg-gray-100 rounded-full shrink-0" />
+                    )}
+                    <span className="font-bold text-gray-800 text-sm truncate text-left">
+                      {match.awayTeam?.name}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Derecha: Acciones */}
+                <div className="flex items-center justify-end gap-2 lg:w-64 shrink-0">
+                  {match.status === "Programado" ? (
+                    <Link
+                      to={`/admin/partidos/resultado/${match._id}`}
+                      className="px-4 py-2 bg-nyg-blue text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors whitespace-nowrap"
+                    >
+                      Cargar Resultado
+                    </Link>
+                  ) : (
+                    <div className="flex gap-2">
                       <Link
                         to={`/admin/partidos/resultado/${match._id}`}
-                        className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors"
+                        className="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors whitespace-nowrap"
+                        title="Editar Resultado"
                       >
                         Editar Rdo
                       </Link>
-                    )}
+                      <Link
+                        to={`/admin/partidos/estadisticas/${match._id}`}
+                        className="px-4 py-2 bg-nyg-gold text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-yellow-600 transition-colors whitespace-nowrap"
+                        title="Planilla de Estadísticas"
+                      >
+                        Stats
+                      </Link>
+                    </div>
+                  )}
 
-                    <Link
-                      to={`/admin/partidos/editar/${match._id}`}
-                      className="p-1.5 text-gray-400 hover:text-nyg-blue bg-white hover:bg-blue-50 rounded-full transition-colors border border-gray-100"
-                      title="Editar Info"
-                    >
-                      <Edit2 size={14} />
-                    </Link>
-                    <button
-                      onClick={() =>
-                        handleDelete(
-                          match._id,
-                          match.homeTeam?.name,
-                          match.awayTeam?.name,
-                        )
-                      }
-                      className="p-1.5 text-gray-400 hover:text-nyg-red bg-white hover:bg-red-50 rounded-full transition-colors border border-gray-100"
-                      title="Eliminar"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
+                  <div className="w-px h-6 bg-gray-200 mx-1 hidden sm:block"></div>
+
+                  <Link
+                    to={`/admin/partidos/editar/${match._id}`}
+                    className="p-2 text-gray-400 hover:text-nyg-blue hover:bg-blue-50 rounded-full transition-colors"
+                    title="Configurar Partido"
+                  >
+                    <Edit2 size={16} />
+                  </Link>
+                  <button
+                    onClick={() =>
+                      handleDelete(
+                        match._id,
+                        match.homeTeam?.name,
+                        match.awayTeam?.name,
+                      )
+                    }
+                    className="p-2 text-gray-400 hover:text-nyg-red hover:bg-red-50 rounded-full transition-colors"
+                    title="Eliminar Partido"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               </div>
             ))}
