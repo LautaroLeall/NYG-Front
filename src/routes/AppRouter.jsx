@@ -42,6 +42,7 @@ import TournamentForm from "../pages/admin/tournaments/TournamentForm";
 import MatchList from "../pages/admin/matches/MatchList";
 import MatchForm from "../pages/admin/matches/MatchForm";
 import MatchResultForm from "../pages/admin/matches/MatchResultForm";
+import MatchStatsForm from "../pages/admin/matches/MatchStatsForm";
 
 const AppRouter = () => {
   return (
@@ -76,6 +77,10 @@ const AppRouter = () => {
             <Route
               path="partidos/resultado/:id"
               element={<MatchResultForm />}
+            />
+            <Route
+              path="partidos/estadisticas/:id"
+              element={<MatchStatsForm />}
             />
 
             <Route
