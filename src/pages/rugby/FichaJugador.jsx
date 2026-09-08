@@ -1,29 +1,59 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Activity, Trophy, Shield, Calendar } from "lucide-react";
+import {
+  ArrowLeft,
+  Activity,
+  Trophy,
+  Shield,
+  Calendar,
+  Loader2,
+} from "lucide-react";
+import axios from "../../api/axiosConfig";
+import dayjs from "dayjs";
 
 const FichaJugador = () => {
   const { id } = useParams();
+  const [player, setPlayer] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mocks de datos del jugador (en el futuro esto vendrá del Backend)
-  const player = {
-    id,
-    name: "Gabriel Ascárate",
-    position: "Centro",
-    number: "12",
-    image: "/gabrielAscarate.png", // o imagen generica
-    birthDate: "20/10/1987",
-    height: "1.85m",
-    weight: "92kg",
-    debut: "2006",
-    stats: {
-      caps: 145,
-      tries: 32,
-      yellowCards: 4,
-      redCards: 0,
-    },
-    bio: "Jugador histórico del club, formado en nuestras infantiles. Con paso por el rugby europeo e integrante de los seleccionados nacionales (Pumas, Jaguares). Referente indiscutido dentro y fuera de la cancha, destaca por su dureza defensiva y su visión de juego en ataque.",
-  };
+  useEffect(() => {
+    const fetchPlayer = async () => {
+      try {
+        const res = await axios.get(`/api/players/${id}`);
+        setPlayer(res.data.data);
+      } catch (error) {
+        console.error("Error fetching player", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPlayer();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full bg-gray-50 min-h-screen flex items-center justify-center">
+        <Loader2 className="w-12 h-12 animate-spin text-nyg-blue" />
+      </div>
+    );
+  }
+
+  if (!player) {
+    return (
+      <div className="w-full bg-gray-50 min-h-screen flex items-center justify-center flex-col gap-4">
+        <h2 className="text-2xl font-bold text-nyg-blue">
+          Jugador no encontrado
+        </h2>
+        <Link
+          to="/rugby/plantel-superior"
+          className="text-nyg-red font-bold flex items-center gap-2"
+        >
+          <ArrowLeft size={20} /> Volver al Plantel
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full bg-gray-50 pb-20 overflow-hidden">
@@ -31,9 +61,11 @@ const FichaJugador = () => {
       <div className="relative bg-nyg-blue overflow-hidden pt-24 min-h-[60vh] flex items-center">
         {/* Fondo decorativo */}
         <div className="absolute inset-0 opacity-10 bg-[url('/img-club1.png')] bg-cover mix-blend-overlay"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-7xl mx-auto flex items-center justify-center pointer-events-none opacity-5">
-          <span className="text-[20rem] font-black text-white">
-            {player.number}
+
+        {/* Marca de agua NYG / Número */}
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full h-full max-w-7xl flex items-center justify-start pointer-events-none opacity-10 overflow-hidden pl-4 md:pl-20">
+          <span className="text-[10rem] sm:text-[14rem] md:text-[18rem] font-black text-white leading-none">
+            {player.number || "NYG"}
           </span>
         </div>
 
@@ -56,11 +88,11 @@ const FichaJugador = () => {
                 {player.position}
               </span>
               <span className="text-nyg-gold font-bold uppercase tracking-widest text-sm border border-nyg-gold px-4 py-1 rounded-full">
-                Plantel Superior
+                {player.category}
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tight leading-none mb-2 drop-shadow-lg">
+            <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tight leading-none mb-2 drop-shadow-lg">
               {player.name}
             </h1>
           </motion.div>
@@ -74,14 +106,17 @@ const FichaJugador = () => {
           >
             <div className="absolute bottom-0 w-64 h-64 bg-nyg-red opacity-20 blur-3xl rounded-full"></div>
             <img
-              src={player.image}
+              src={
+                player.imageUrl ||
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=DC2626&color=fff&size=512`
+              }
               alt={player.name}
               className="relative z-10 w-full h-full object-contain object-bottom drop-shadow-[0_20px_20px_rgba(0,0,0,0.5)]"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src =
                   "https://ui-avatars.com/api/?name=" +
-                  player.name +
+                  encodeURIComponent(player.name) +
                   "&background=DC2626&color=fff&size=512";
                 e.target.className =
                   "relative z-10 w-64 h-64 rounded-full border-8 border-white/10 object-cover shadow-2xl mb-12";
@@ -94,49 +129,48 @@ const FichaJugador = () => {
       {/* Contenido / Estadísticas */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 md:-mt-24 relative z-20">
         <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-12">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Bio y Ficha Física */}
-            <div className="lg:col-span-2 space-y-12">
-              <div>
-                <h3 className="text-2xl font-black text-nyg-blue uppercase tracking-widest mb-6 flex items-center gap-3">
-                  <Activity className="text-nyg-red" /> Biografía
-                </h3>
-                <p className="text-gray-600 text-lg leading-relaxed">
-                  {player.bio}
-                </p>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Ficha Física */}
+            <div className="flex flex-col justify-center">
+              <h3 className="text-xl font-black text-nyg-blue uppercase tracking-widest mb-8 flex items-center gap-3 border-b border-gray-200 pb-4">
+                <Activity className="text-nyg-red" /> Ficha del Jugador
+              </h3>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-gray-100 pt-8">
+              <div className="grid grid-cols-2 gap-8">
                 <div>
                   <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
                     Altura
                   </span>
-                  <span className="text-2xl font-black text-gray-800">
-                    {player.height}
+                  <span className="text-3xl font-black text-gray-800">
+                    {player.height ? `${player.height} cm` : "-"}
                   </span>
                 </div>
                 <div>
                   <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
                     Peso
                   </span>
-                  <span className="text-2xl font-black text-gray-800">
-                    {player.weight}
+                  <span className="text-3xl font-black text-gray-800">
+                    {player.weight ? `${player.weight} kg` : "-"}
                   </span>
                 </div>
                 <div>
                   <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
                     Nacimiento
                   </span>
-                  <span className="text-xl font-black text-gray-800">
-                    {player.birthDate}
+                  <span className="text-2xl font-black text-gray-800">
+                    {player.dateOfBirth
+                      ? dayjs(player.dateOfBirth).format("DD/MM/YYYY")
+                      : "-"}
                   </span>
                 </div>
                 <div>
                   <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
-                    Debut
+                    Estado
                   </span>
-                  <span className="text-xl font-black text-nyg-red">
-                    {player.debut}
+                  <span
+                    className={`text-2xl font-black ${player.isActive ? "text-nyg-red" : "text-gray-400"}`}
+                  >
+                    {player.isActive ? "Activo" : "Inactivo"}
                   </span>
                 </div>
               </div>
@@ -145,7 +179,7 @@ const FichaJugador = () => {
             {/* Estadísticas */}
             <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
               <h3 className="text-xl font-black text-nyg-blue uppercase tracking-widest mb-8 flex items-center gap-3 border-b border-gray-200 pb-4">
-                <Trophy className="text-nyg-gold" /> Estadísticas Históricas
+                <Trophy className="text-nyg-gold" /> Estadísticas
               </h3>
 
               <div className="space-y-6">
@@ -154,7 +188,15 @@ const FichaJugador = () => {
                     Partidos Jugados (Caps)
                   </span>
                   <span className="text-2xl font-black text-nyg-blue">
-                    {player.stats.caps}
+                    {player.stats?.caps || 0}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 font-medium">
+                    Minutos Jugados
+                  </span>
+                  <span className="text-2xl font-black text-nyg-blue">
+                    {player.stats?.minutesPlayed || 0}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -162,7 +204,7 @@ const FichaJugador = () => {
                     Tries Anotados
                   </span>
                   <span className="text-2xl font-black text-nyg-blue">
-                    {player.stats.tries}
+                    {player.stats?.tries || 0}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -171,7 +213,7 @@ const FichaJugador = () => {
                     Amarillas
                   </span>
                   <span className="text-xl font-black text-gray-800">
-                    {player.stats.yellowCards}
+                    {player.stats?.yellowCards || 0}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -180,7 +222,7 @@ const FichaJugador = () => {
                     Rojas
                   </span>
                   <span className="text-xl font-black text-gray-800">
-                    {player.stats.redCards}
+                    {player.stats?.redCards || 0}
                   </span>
                 </div>
               </div>
