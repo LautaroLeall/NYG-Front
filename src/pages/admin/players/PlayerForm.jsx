@@ -185,23 +185,26 @@ const PlayerForm = () => {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        
         {/* Contenedor Principal divido en Foto + Datos */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8">
-          
           {/* Columna Izquierda (Foto y Estado) */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white border border-gray-100 shadow-sm rounded-3xl p-6 md:p-8 flex flex-col items-center">
-              
               <div className="relative w-40 h-40 mb-6 group cursor-pointer">
                 <div className="w-full h-full rounded-full border-4 border-gray-50 overflow-hidden bg-gray-100 shadow-inner flex items-center justify-center">
                   {imageUrl ? (
-                    <img src={imageUrl} alt="Perfil" className="w-full h-full object-cover object-top" />
+                    <img
+                      src={imageUrl}
+                      alt="Perfil"
+                      className="w-full h-full object-cover object-top"
+                    />
                   ) : (
-                    <span className="text-4xl font-black text-gray-300">NYG</span>
+                    <span className="text-4xl font-black text-gray-300">
+                      NYG
+                    </span>
                   )}
                 </div>
-                
+
                 {/* Overlay de Carga */}
                 <label className="absolute inset-0 bg-nyg-blue/80 rounded-full flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                   {uploadingImage ? (
@@ -209,26 +212,33 @@ const PlayerForm = () => {
                   ) : (
                     <>
                       <UploadCloud className="w-8 h-8 mb-1" />
-                      <span className="text-xs font-bold uppercase tracking-widest">Subir Foto</span>
+                      <span className="text-xs font-bold uppercase tracking-widest">
+                        Subir Foto
+                      </span>
                     </>
                   )}
-                  <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} />
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploadingImage}
+                  />
                 </label>
               </div>
 
               <div className="w-full">
                 <label className="flex items-center justify-between p-4 px-5 rounded-2xl border-2 border-gray-50 bg-gray-50/50 cursor-pointer hover:bg-gray-50 transition-colors">
-                  <span className="text-sm font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                  <span className="text-sm font-bold text-gray-600 uppercase tracking-wider whitespace-nowrap mr-3">
                     Jugador Activo
                   </span>
-                  <div className="relative inline-block w-12 shrink-0 align-middle select-none transition duration-200 ease-in ml-2">
+                  <div className="relative flex items-center">
                     <input
                       type="checkbox"
                       {...register("isActive")}
-                      className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
-                      style={{ right: 0 }}
+                      className="peer sr-only"
                     />
-                    <label className="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                    <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-nyg-blue"></div>
                   </div>
                 </label>
               </div>
