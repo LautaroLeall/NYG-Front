@@ -26,7 +26,7 @@ axiosInstance.interceptors.request.use(
     const timeoutId = setTimeout(() => {
       toast("Precalentando al pack de forwards... aguantá unos segundos.", {
         icon: '🏉',
-        duration: 5000,
+        duration: 3000,
         style: {
           borderRadius: '10px',
           background: '#0A1128',
