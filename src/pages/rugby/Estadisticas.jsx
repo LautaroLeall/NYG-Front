@@ -1,97 +1,63 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Trophy } from "lucide-react";
-
-// Mocks
-const TOURNAMENTS = ["Campeonato Anual Tucumano", "General Temporada"];
+import { ArrowLeft, Trophy, Loader2 } from "lucide-react";
+import axios from "../../api/axiosConfig";
 
 const STAT_TYPES = [
-  { id: "tries", label: "Triman (Tries)" },
-  { id: "points", label: "Goleadores (Puntos)" },
-  { id: "caps", label: "Partidos Jugados" },
+  { id: "anotadores", label: "Triman (Tries)" },
+  { id: "goleadores", label: "Goleadores (Puntos)" },
+  { id: "partidos", label: "Partidos Jugados (Caps)" },
+  { id: "minutos", label: "Minutos Jugados" },
 ];
 
-const STATS_DATA = {
-  tries: [
-    {
-      rank: 1,
-      name: "Gabriel Ascárate",
-      pos: "Centro",
-      val: 12,
-      img: "/gabrielAscarate.png",
-    },
-    {
-      rank: 2,
-      name: "Lucas Santamarina",
-      pos: "Fullback",
-      val: 9,
-      img: "https://ui-avatars.com/api/?name=LS&background=DC2626&color=fff&size=150",
-    },
-    {
-      rank: 3,
-      name: "Joaquín Bustos",
-      pos: "Wing",
-      val: 7,
-      img: "https://ui-avatars.com/api/?name=JB&background=DC2626&color=fff&size=150",
-    },
-  ],
-  points: [
-    {
-      rank: 1,
-      name: "Máximo Ledesma",
-      pos: "Apertura",
-      val: 145,
-      img: "https://ui-avatars.com/api/?name=ML&background=DC2626&color=fff&size=150",
-    },
-    {
-      rank: 2,
-      name: "Gabriel Ascárate",
-      pos: "Centro",
-      val: 60,
-      img: "/gabrielAscarate.png",
-    },
-    {
-      rank: 3,
-      name: "Lucas Santamarina",
-      pos: "Fullback",
-      val: 45,
-      img: "https://ui-avatars.com/api/?name=LS&background=DC2626&color=fff&size=150",
-    },
-  ],
-  caps: [
-    {
-      rank: 1,
-      name: "Gonzalo García",
-      pos: "Medio Scrum",
-      val: 14,
-      img: "/gonzaloGarcia.png",
-    },
-    {
-      rank: 2,
-      name: "Lucas Santamarina",
-      pos: "Fullback",
-      val: 13,
-      img: "https://ui-avatars.com/api/?name=LS&background=DC2626&color=fff&size=150",
-    },
-    {
-      rank: 3,
-      name: "Gabriel Ascárate",
-      pos: "Centro",
-      val: 12,
-      img: "/gabrielAscarate.png",
-    },
-  ],
-};
-
 const Estadisticas = () => {
-  const [selectedTournament, setSelectedTournament] = useState(TOURNAMENTS[0]);
-  const [activeStat, setActiveStat] = useState("tries");
+  const [tournaments, setTournaments] = useState([]);
+  const [selectedTournamentId, setSelectedTournamentId] = useState("Todos");
+  const [activeStat, setActiveStat] = useState("anotadores");
 
-  const currentData = STATS_DATA[activeStat] || [];
+  const [rankings, setRankings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Cargar Torneos
+  useEffect(() => {
+    const fetchTournaments = async () => {
+      try {
+        const res = await axios.get("/api/tournaments");
+        // El endpoint /api/tournaments devuelve un array directamente, no un objeto {data: []}
+        setTournaments(res.data || []);
+      } catch (error) {
+        console.error("Error al cargar torneos", error);
+        setTournaments([]);
+      }
+    };
+    fetchTournaments();
+  }, []);
+
+  // Cargar Rankings
+  useEffect(() => {
+    const fetchRankings = async () => {
+      setIsLoading(true);
+      try {
+        const url = `/api/stats/rankings?tipo=${activeStat}${
+          selectedTournamentId !== "Todos"
+            ? `&tournamentId=${selectedTournamentId}`
+            : ""
+        }&limit=3`;
+        const res = await axios.get(url);
+        setRankings(res.data.data || []);
+      } catch (error) {
+        console.error("Error al cargar rankings", error);
+        setRankings([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchRankings();
+  }, [activeStat, selectedTournamentId]);
 
   return (
-    <div className="w-full bg-gray-50 pb-20 overflow-hidden">
+    <div className="w-full bg-gray-50 pb-20 overflow-hidden min-h-screen">
       {/* Cabecera / Hero Unificada */}
       <div
         className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
@@ -122,6 +88,7 @@ const Estadisticas = () => {
         >
           <ArrowLeft size={20} /> Volver a Rugby
         </Link>
+
         {/* Selector de Torneo (Pills) */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -129,17 +96,27 @@ const Estadisticas = () => {
           className="mb-12 flex justify-center"
         >
           <div className="flex flex-wrap items-center justify-center gap-2 bg-white p-1.5 rounded-full shadow-lg border border-gray-100">
-            {TOURNAMENTS.map((t) => (
+            <button
+              onClick={() => setSelectedTournamentId("Todos")}
+              className={`px-5 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 ${
+                selectedTournamentId === "Todos"
+                  ? "bg-nyg-blue text-white shadow-md"
+                  : "bg-transparent text-gray-400 hover:text-nyg-blue hover:bg-gray-50"
+              }`}
+            >
+              General Histórico
+            </button>
+            {tournaments.map((t) => (
               <button
-                key={t}
-                onClick={() => setSelectedTournament(t)}
+                key={t._id}
+                onClick={() => setSelectedTournamentId(t._id)}
                 className={`px-5 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 ${
-                  selectedTournament === t
+                  selectedTournamentId === t._id
                     ? "bg-nyg-blue text-white shadow-md"
                     : "bg-transparent text-gray-400 hover:text-nyg-blue hover:bg-gray-50"
                 }`}
               >
-                {t}
+                {t.name}
               </button>
             ))}
           </div>
@@ -162,8 +139,12 @@ const Estadisticas = () => {
           ))}
         </div>
 
-        {/* Podio 1-2-3 Minimalista */}
-        {currentData.length >= 3 ? (
+        {/* Loading State o Podio */}
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="w-12 h-12 text-nyg-blue animate-spin" />
+          </div>
+        ) : rankings.length >= 3 ? (
           <div className="flex flex-col md:flex-row items-end justify-center gap-4 md:gap-8 mt-12 md:mt-32 h-auto md:h-80 max-w-3xl mx-auto">
             {/* 2do Puesto */}
             <motion.div
@@ -174,20 +155,21 @@ const Estadisticas = () => {
             >
               <div className="w-20 h-20 rounded-full p-1 bg-linear-to-br from-gray-300 to-gray-400 shadow-md mb-3">
                 <img
-                  src={currentData[1].img}
-                  alt={currentData[1].name}
+                  src={
+                    rankings[1].playerInfo?.imageUrl ||
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(rankings[1].playerInfo?.name)}&background=0A1128&color=fff&size=150`
+                  }
+                  alt={rankings[1].playerInfo?.name}
                   className="w-full h-full object-cover rounded-full border-2 border-white"
                 />
               </div>
               <span className="font-black text-gray-800 text-center leading-tight mb-1">
-                {currentData[1].name}
+                {rankings[1].playerInfo?.name}
               </span>
               <span className="text-3xl font-black text-gray-400 mb-4">
-                {currentData[1].val}
+                {rankings[1].value}
               </span>
-              <div className="w-full h-24 md:h-32 bg-gray-100 rounded-t-xl flex justify-center pt-3 border-t-4 border-gray-300 shadow-inner">
-                <span className="text-3xl font-black text-gray-300">2</span>
-              </div>
+              <div className="w-full h-24 md:h-32 bg-gray-100 rounded-t-xl flex justify-center pt-3 border-t-4 border-gray-300 shadow-inner"></div>
             </motion.div>
 
             {/* 1er Puesto */}
@@ -200,20 +182,21 @@ const Estadisticas = () => {
               <Trophy className="text-nyg-gold mb-2 drop-shadow-md" size={32} />
               <div className="w-28 h-28 rounded-full p-1 bg-linear-to-br from-nyg-gold to-yellow-600 shadow-xl mb-3">
                 <img
-                  src={currentData[0].img}
-                  alt={currentData[0].name}
+                  src={
+                    rankings[0].playerInfo?.imageUrl ||
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(rankings[0].playerInfo?.name)}&background=0A1128&color=fff&size=200`
+                  }
+                  alt={rankings[0].playerInfo?.name}
                   className="w-full h-full object-cover rounded-full border-4 border-white"
                 />
               </div>
               <span className="text-xl font-black text-nyg-blue text-center leading-tight mb-1">
-                {currentData[0].name}
+                {rankings[0].playerInfo?.name}
               </span>
               <span className="text-5xl font-black text-nyg-red mb-4 drop-shadow-sm">
-                {currentData[0].val}
+                {rankings[0].value}
               </span>
-              <div className="w-full h-24 md:h-40 bg-nyg-blue rounded-t-xl flex justify-center pt-4 border-t-4 border-nyg-gold shadow-2xl">
-                <span className="text-5xl font-black text-nyg-gold">1</span>
-              </div>
+              <div className="w-full h-24 md:h-40 bg-nyg-blue rounded-t-xl flex justify-center pt-4 border-t-4 border-nyg-gold shadow-2xl"></div>
             </motion.div>
 
             {/* 3er Puesto */}
@@ -225,25 +208,33 @@ const Estadisticas = () => {
             >
               <div className="w-16 h-16 rounded-full p-1 bg-linear-to-br from-amber-600 to-amber-800 shadow-md mb-3">
                 <img
-                  src={currentData[2].img}
-                  alt={currentData[2].name}
+                  src={
+                    rankings[2].playerInfo?.imageUrl ||
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(rankings[2].playerInfo?.name)}&background=0A1128&color=fff&size=150`
+                  }
+                  alt={rankings[2].playerInfo?.name}
                   className="w-full h-full object-cover rounded-full border-2 border-white"
                 />
               </div>
               <span className="text-sm font-black text-gray-700 text-center leading-tight mb-1">
-                {currentData[2].name}
+                {rankings[2].playerInfo?.name}
               </span>
               <span className="text-2xl font-black text-amber-700 mb-4">
-                {currentData[2].val}
+                {rankings[2].value}
               </span>
-              <div className="w-full h-24 md:h-24 bg-gray-50 rounded-t-xl flex justify-center pt-2 border-t-4 border-amber-700 shadow-inner">
-                <span className="text-2xl font-black text-amber-700/30">3</span>
-              </div>
+              <div className="w-full h-24 md:h-24 bg-gray-50 rounded-t-xl flex justify-center pt-2 border-t-4 border-amber-700 shadow-inner"></div>
             </motion.div>
           </div>
         ) : (
-          <div className="py-20 text-center text-gray-400 font-medium">
-            No hay suficientes datos para armar el podio.
+          <div className="py-20 text-center flex flex-col items-center">
+            <Trophy className="text-gray-200 mb-4" size={48} />
+            <h3 className="text-xl font-bold text-gray-400">
+              Sin datos suficientes
+            </h3>
+            <p className="text-gray-400 mt-2">
+              Se necesitan al menos 3 jugadores con estadísticas cargadas para
+              formar el podio.
+            </p>
           </div>
         )}
       </div>
