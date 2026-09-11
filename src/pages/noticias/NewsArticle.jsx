@@ -1,37 +1,55 @@
 import { motion } from "framer-motion";
-import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Calendar, Tag, User, Share2 } from "lucide-react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { ArrowLeft, Calendar, Tag, User, Share2, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import axios from "../../api/axiosConfig";
+import dayjs from "dayjs";
+import "dayjs/locale/es";
+dayjs.locale("es");
 
 const NewsArticle = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
+  const [article, setArticle] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data temporal
-  const article = {
-    title: "¡Triunfazo en el clásico de la fecha!",
-    category: "Rugby",
-    date: "29 AGO 2026",
-    author: "Prensa NYG",
-    img: "/img-club5.png",
-    content: `
-      <p>En una tarde soñada a pleno sol en nuestras instalaciones, el Plantel Superior de Natación y Gimnasia logró una victoria fundamental frente a uno de los clásicos rivales de la provincia, afianzándose en los puestos de arriba del Anual Tucumano.</p>
-      
-      <p>El partido fue durísimo desde el minuto cero. La visita planteó un juego físico cerrado con sus forwards, intentando asfixiar la salida de los nuestros. Sin embargo, la defensa de los Blancos estuvo implacable, con un porcentaje de tackle del 92% en la primera mitad.</p>
-      
-      <h3>El momento clave</h3>
-      <p>A falta de 5 minutos para el final, y con el marcador 21-21, una excelente jugada combinada de los backs terminó en un penal forzado a cinco yardas del in-goal visitante. Nuestro apertura no dudó: pidió palos, y con una frialdad absoluta, sentenció el 24-21 definitivo que hizo estallar a toda la tribuna.</p>
-      
-      <blockquote>"Este grupo se merece estas alegrías. Venimos entrenando durísimo martes, jueves y sábados. Sabíamos que iba a ser un partido de ajedrez y lo supimos resolver con cabeza fría en los momentos calientes", declaró el capitán post partido.</blockquote>
-      
-      <p>Ahora, la mirada está puesta en el próximo sábado, donde el equipo deberá viajar para defender la racha ganadora. ¡Vamos Blancos!</p>
-    `,
-  };
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get(`/api/news/${slug}`);
+        setArticle(res.data.data);
+      } catch (error) {
+        console.error("Error al cargar la noticia:", error);
+        // Si no existe, redirigir al listado
+        navigate("/noticias");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchArticle();
+  }, [slug, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="w-12 h-12 text-nyg-blue animate-spin" />
+      </div>
+    );
+  }
+
+  if (!article) return null;
 
   return (
     <div className="w-full bg-white pb-32">
       {/* Portada */}
       <div
-        className="relative h-[60vh] min-h-125 flex items-end justify-center bg-center bg-cover"
-        style={{ backgroundImage: `url('${article.img}')` }}
+        className="relative h-[60vh] min-h-125 flex items-end justify-center bg-center bg-cover bg-gray-100"
+        style={{
+          backgroundImage: article.imageUrl
+            ? `url('${article.imageUrl}')`
+            : "none",
+        }}
       >
         <div className="absolute inset-0 bg-linear-to-t from-gray-900 via-gray-900/60 to-transparent"></div>
 
@@ -54,15 +72,21 @@ const NewsArticle = () => {
               {article.category}
             </span>
             <span className="flex items-center gap-1">
-              <Calendar size={14} /> {article.date}
+              <Calendar size={14} />{" "}
+              {dayjs(article.publishDate).format("DD MMM YYYY")}
             </span>
             <span className="flex items-center gap-1">
-              <User size={14} /> {article.author}
+              <User size={14} /> {article.author || "Prensa NYG"}
             </span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg">
+          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
             {article.title}
           </h1>
+          {article.subtitle && (
+            <p className="text-xl md:text-2xl text-gray-300 font-medium">
+              {article.subtitle}
+            </p>
+          )}
         </motion.div>
       </div>
 
@@ -70,7 +94,17 @@ const NewsArticle = () => {
         {/* Sidebar Social (Desktop) */}
         <div className="hidden md:flex flex-col gap-4 w-16 shrink-0 pt-4">
           <div className="sticky top-32 flex flex-col gap-4">
-            <button className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-nyg-blue hover:text-white transition-colors">
+            <button
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: article.title,
+                    url: window.location.href,
+                  });
+                }
+              }}
+              className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-nyg-blue hover:text-white transition-colors"
+            >
               <Share2 size={20} />
             </button>
           </div>
@@ -81,14 +115,17 @@ const NewsArticle = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="prose prose-lg prose-blue max-w-none w-full
+          className="prose prose-lg prose-blue max-w-none w-full wrap-break-word overflow-hidden
             prose-headings:font-black prose-headings:text-nyg-blue
             prose-p:text-gray-600 prose-p:leading-relaxed
             prose-a:text-nyg-red prose-a:no-underline hover:prose-a:underline
-            prose-blockquote:border-l-nyg-red prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:not-italic prose-blockquote:text-gray-700 prose-blockquote:rounded-r-2xl
           "
-          dangerouslySetInnerHTML={{ __html: article.content }}
-        />
+        >
+          {article.content.split("\n").map((paragraph, index) => {
+            if (!paragraph.trim()) return <br key={index} />;
+            return <p key={index}>{paragraph}</p>;
+          })}
+        </motion.article>
       </div>
     </div>
   );
