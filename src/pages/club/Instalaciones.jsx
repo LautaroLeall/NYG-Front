@@ -116,9 +116,9 @@ const Instalaciones = () => {
                 familia al club. Nuestras secretarías atienden de Lunes a
                 Viernes de 18:00 a 22:00hs.
               </p>
-              <button className="bg-nyg-red text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-red-700 transition-colors shadow-lg inline-flex items-center gap-2">
+              <a className="bg-nyg-red text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-red-700 transition-colors shadow-lg inline-flex items-center gap-2" href="https://maps.app.goo.gl/oa2nUaJ3peYNcTmQ8" target="_blank" rel="noreferrer">
                 <MapPin size={20} /> Abrir en Google Maps
-              </button>
+              </a>
             </div>
 
             <div className="w-full md:w-1/2 h-96 rounded-3xl overflow-hidden shadow-xl border border-gray-200 bg-gray-100">
