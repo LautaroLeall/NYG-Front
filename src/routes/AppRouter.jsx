@@ -44,6 +44,10 @@ import MatchForm from "../pages/admin/matches/MatchForm";
 import MatchResultForm from "../pages/admin/matches/MatchResultForm";
 import MatchStatsForm from "../pages/admin/matches/MatchStatsForm";
 
+// Admin - Noticias
+import NewsList from "../pages/admin/news/NewsList";
+import NewsForm from "../pages/admin/news/NewsForm";
+
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -83,12 +87,11 @@ const AppRouter = () => {
               element={<MatchStatsForm />}
             />
 
-            <Route
-              path="noticias"
-              element={
-                <div className="text-gray-800 p-4">Sección Noticias</div>
-              }
-            />
+            {/* Rutas ABM Noticias */}
+            <Route path="noticias" element={<NewsList />} />
+            <Route path="noticias/nueva" element={<NewsForm />} />
+            <Route path="noticias/editar/:id" element={<NewsForm />} />
+
             <Route
               path="alertas"
               element={
