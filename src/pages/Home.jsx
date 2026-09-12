@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import HeroScene from "../components/3d/HeroScene";
 import LatestResults from "../components/home/LatestResults";
-import HighlightsCarousel from "../components/home/HighlightsCarousel";
 import FeaturedNews from "../components/home/FeaturedNews";
 import QuickLinks from "../components/home/QuickLinks";
 import CountdownCentenario from "../components/home/CountdownCentenario";
+import NextMatch from "../components/home/NextMatch";
+import StandingsPreview from "../components/home/StandingsPreview";
+import SponsorsBar from "../components/home/SponsorsBar";
 
 const Home = () => {
   return (
@@ -64,20 +66,26 @@ const Home = () => {
 
       {/* --- SECCIONES DE CONTENIDO DE LA PORTADA --- */}
 
-      {/* FE-014: Accesos Rápidos */}
+      {/* Accesos Rápidos */}
       <QuickLinks />
 
-      {/* FE-011: Últimos Resultados */}
+      {/* Próximo Partido */}
+      <NextMatch />
+
+      {/* Últimos Resultados */}
       <LatestResults />
 
-      {/* FE-012: Carrusel de Highlights */}
-      <HighlightsCarousel />
+      {/* Posiciones Top 5 */}
+      <StandingsPreview />
 
-      {/* FE-013: Noticias Destacadas */}
+      {/* Noticias Destacadas */}
       <FeaturedNews />
 
-      {/* FE-015: Campaña Centenario */}
+      {/* Campaña Centenario */}
       <CountdownCentenario />
+
+      {/* Sponsors */}
+      <SponsorsBar />
     </div>
   );
 };
