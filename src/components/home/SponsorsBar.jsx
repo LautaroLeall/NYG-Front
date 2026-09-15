@@ -5,27 +5,37 @@ const SPONSORS = [
   {
     id: 1,
     name: "Macro",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Banco_Macro_logo.svg/2560px-Banco_Macro_logo.svg.png",
+    logo: "/sponsors/banco-macro.png",
   },
   {
     id: 2,
-    name: "Gatorade",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Gatorade_logo.svg/1024px-Gatorade_logo.svg.png",
+    name: "Procer",
+    logo: "/sponsors/procer.png",
   },
   {
     id: 3,
     name: "Imperial",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Imperial_logo.svg/2560px-Imperial_logo.svg.png",
+    logo: "/sponsors/imperial-cerveza.png",
   },
   {
     id: 4,
-    name: "Gilbert",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Gilbert_Rugby_logo.svg/2560px-Gilbert_Rugby_logo.svg.png",
+    name: "Subway",
+    logo: "/sponsors/subway.png",
   },
   {
     id: 5,
-    name: "OSDE",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/OSDE_logo.svg/2560px-OSDE_logo.svg.png",
+    name: "Red",
+    logo: "/sponsors/red-seguros.png",
+  },
+  {
+    id: 6,
+    name: "Municipalidad SMT",
+    logo: "/sponsors/municipalidad-smt.png",
+  },
+  {
+    id: 7,
+    name: "Alfa Constructora",
+    logo: "/sponsors/alfa-constructora.png",
   },
 ];
 
