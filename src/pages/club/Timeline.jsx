@@ -55,9 +55,16 @@ const MILESTONES = [
   {
     year: "2026",
     title: "La Décima Estrella",
-    desc: "Consolidación de nuestra supremacía local al conquistar el 10° Campeonato Anual Tucumano.",
+    desc: "Consolidación de nuestra supremacía local al conquistar el 10º Campeonato Anual Tucumano.",
     icon: <Trophy size={24} />,
     color: "bg-nyg-blue text-white",
+  },
+  {
+    year: "2026",
+    title: "Primer Título Nacional",
+    desc: "Bajo la lluvia en La Caldera del Parque, los Blancos vencen a Lawn Tennis y conquistan el Torneo del Interior B.",
+    icon: <Trophy size={24} />,
+    color: "bg-nyg-gold text-nyg-blue",
   },
 ];
 
