@@ -75,9 +75,6 @@ const NewsArticle = () => {
               <Calendar size={14} />{" "}
               {dayjs(article.publishDate).format("DD MMM YYYY")}
             </span>
-            <span className="flex items-center gap-1">
-              <User size={14} /> {article.author || "Prensa NYG"}
-            </span>
           </div>
           <h1 className="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
             {article.title}
