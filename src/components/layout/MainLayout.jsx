@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 // import Footer from "./Footer";
 import ScrollToTop from "./ScrollToTop";
+import LiveNotifier from "../common/LiveNotifier";
 
 const MainLayout = () => {
   const location = useLocation();
@@ -11,6 +12,9 @@ const MainLayout = () => {
     <div className="flex flex-col min-h-screen bg-nyg-white">
       {/* Restaura el scroll siempre que cambiamos de pestaña/ruta */}
       <ScrollToTop />
+
+      {/* Notificador invisible en vivo */}
+      <LiveNotifier />
 
       {/* Header Fijo con efecto Glassmorphism */}
       <Header />
