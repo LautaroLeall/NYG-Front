@@ -143,10 +143,10 @@ const NextMatch = () => {
                 {locationText}
               </div>
               <Link
-                to="/rugby/fixture"
+                to={`/rugby/partido/${match._id}`}
                 className="inline-flex items-center gap-2 text-nyg-blue font-black uppercase tracking-widest hover:text-nyg-red transition-colors"
               >
-                Ver Fixture <ArrowRight size={18} />
+                Ver Partido <ArrowRight size={18} />
               </Link>
             </div>
           </div>
