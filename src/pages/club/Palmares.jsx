@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Trophy, Star, Award } from "lucide-react";
 
@@ -15,13 +15,14 @@ const ANUAL_YEARS = [
   "2026",
 ];
 const REGIONAL_YEARS = ["2017"];
+const INTERIOR_YEARS = ["2026"];
 
 const Palmares = () => {
   return (
     <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera / Hero alineado con Historia */}
       <div
-        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover md:bg-fixed"
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
@@ -115,13 +116,13 @@ const Palmares = () => {
             </div>
           </motion.div>
 
-          {/* Torneo Regional del NOA */}
+          {/* Campeonato Regional */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-20 pb-12"
+            className="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-20 pb-24 border-b border-gray-100"
           >
             <div className="w-full md:w-1/3 flex flex-col items-center justify-center text-center">
               <motion.div
@@ -163,6 +164,63 @@ const Palmares = () => {
                   <span
                     key={idx}
                     className="text-3xl md:text-4xl font-black text-gray-300 hover:text-nyg-red transition-colors cursor-default"
+                  >
+                    {year}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Torneo del Interior B */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col md:flex-row items-center gap-12 md:gap-20 pb-12"
+          >
+            <div className="w-full md:w-1/3 flex flex-col items-center justify-center text-center">
+              <motion.div
+                animate={{ rotateY: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="mb-6 relative"
+              >
+                <div className="absolute inset-0 bg-nyg-blue opacity-20 blur-2xl rounded-full"></div>
+                <Trophy
+                  size={140}
+                  strokeWidth={1}
+                  className="text-nyg-blue relative z-10"
+                />
+              </motion.div>
+              <h2 className="text-8xl md:text-9xl font-black text-gray-100 tracking-tighter -mt-6 relative z-0">
+                1
+              </h2>
+              <p className="text-nyg-blue font-black tracking-widest uppercase text-xl md:text-2xl -mt-8 relative z-10">
+                Título
+              </p>
+            </div>
+
+            <div className="w-full md:w-2/3">
+              <div className="flex flex-wrap gap-2 mb-6">
+                <Star className="text-nyg-blue fill-nyg-blue" size={28} />
+              </div>
+              <h3 className="text-4xl md:text-6xl font-black text-nyg-blue uppercase tracking-tight mb-6 leading-none">
+                Torneo del <br />
+                <span className="text-nyg-gold">Interior B</span>
+              </h3>
+              <p className="text-xl md:text-2xl text-gray-500 font-light leading-relaxed mb-10 md:max-w-xl">
+                Bajo una lluvia torrencial en La Caldera del Parque, los Blancos
+                conquistaron el primer título nacional de su historia al vencer
+                a Lawn Tennis (23-15) y coronaron una temporada inolvidable en
+                su tercera final consecutiva.
+              </p>
+
+              <div className="flex flex-wrap gap-x-6 gap-y-4">
+                {INTERIOR_YEARS.map((year, idx) => (
+                  <span
+                    key={idx}
+                    className="text-3xl md:text-4xl font-black text-gray-300 hover:text-nyg-blue transition-colors cursor-default"
                   >
                     {year}
                   </span>
