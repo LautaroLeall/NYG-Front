@@ -24,15 +24,15 @@ const CountdownCentenario = () => {
 
       {/* Contenido Frontal */}
       <div className="max-w-5xl mx-auto px-4 relative z-10 text-center">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-nyg-gold mb-8 uppercase tracking-widest drop-shadow-lg">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-nyg-gold mb-8 uppercase tracking-wider md:tracking-widest drop-shadow-lg wrap-break-word">
           #RumboAlCentenario
         </h2>
 
         <div className="flex flex-col md:flex-row justify-center items-center md:items-baseline gap-2 md:gap-4 mb-8">
-          <span className="text-8xl md:text-[150px] font-black text-white leading-none drop-shadow-2xl">
+          <span className="text-7xl sm:text-8xl md:text-[150px] font-black text-white leading-none drop-shadow-2xl">
             {daysRemaining}
           </span>
-          <span className="text-3xl md:text-5xl text-gray-300 font-light uppercase tracking-widest">
+          <span className="text-2xl sm:text-3xl md:text-5xl text-gray-300 font-light uppercase tracking-widest">
             días
           </span>
         </div>
@@ -44,7 +44,7 @@ const CountdownCentenario = () => {
 
         <Link
           to="/el-club/historia"
-          className="inline-block bg-nyg-gold hover:bg-yellow-500 text-nyg-blue font-black py-4 px-12 rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(212,175,55,0.4)] text-lg uppercase tracking-wider"
+          className="bg-nyg-gold hover:bg-yellow-500 text-nyg-black font-black py-4 px-10 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)] transition-all hover:shadow-[0_0_15px_rgba(212,175,55,1)] active:scale-95 text-lg cursor-pointer"
         >
           Conocé Nuestra Historia
         </Link>
