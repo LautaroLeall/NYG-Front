@@ -2,19 +2,13 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Calendar, Tag, ArrowRight, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
+import SponsorsBar from "../../components/home/SponsorsBar";
 import axios from "../../api/axiosConfig";
 import dayjs from "dayjs";
 import "dayjs/locale/es";
 dayjs.locale("es");
 
-const CATEGORIES = [
-  "Todas",
-  "Institucional",
-  "Rugby",
-  "Hockey",
-  "Infantiles",
-  "Club",
-];
+const CATEGORIES = ["Todas", "Institucional", "Rugby"];
 
 const NewsFeed = () => {
   const [news, setNews] = useState([]);
@@ -90,32 +84,27 @@ const NewsFeed = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20">
         {/* Filtros Llamativos (Tipográficos y Elegantes) */}
-        <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 mb-16 flex overflow-x-auto hide-scrollbar gap-8 md:gap-12 items-center md:justify-center border border-gray-100">
-          {CATEGORIES.map((cat, idx) => {
-            const isActive = activeCategory === cat;
-            return (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 flex justify-center"
+        >
+          <div className="flex flex-wrap items-center justify-center gap-2 bg-white p-1.5 rounded-full shadow-lg border border-gray-100">
+            {CATEGORIES.map((cat, idx) => (
               <button
                 key={idx}
                 onClick={() => setActiveCategory(cat)}
-                className={`relative whitespace-nowrap text-lg md:text-xl font-black uppercase tracking-widest transition-all duration-300 ${
-                  isActive
-                    ? "text-nyg-red"
-                    : "text-gray-400 hover:text-nyg-blue"
+                className={`px-5 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 ${
+                  activeCategory === cat
+                    ? "bg-nyg-blue text-white shadow-md"
+                    : "bg-transparent text-gray-400 hover:text-nyg-blue hover:bg-gray-50"
                 }`}
               >
                 {cat}
-                {isActive && (
-                  <motion.div
-                    layoutId="activeFilter"
-                    className="absolute -bottom-2 left-0 right-0 h-1 bg-nyg-red rounded-full"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
               </button>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        </motion.div>
 
         {news.length === 0 && !isLoading && (
           <motion.div
@@ -138,7 +127,7 @@ const NewsFeed = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full relative h-125 md:h-150 rounded-4xl overflow-hidden mb-16 group cursor-pointer"
+            className="w-full relative h-125 md:h-150 rounded-4xl overflow-hidden mb-14 group cursor-pointer"
           >
             {/* Imagen de Fondo */}
             <div className="absolute inset-0 bg-nyg-blue">
@@ -199,7 +188,7 @@ const NewsFeed = () => {
 
         {/* Listado Editorial Clásico (Sin Cards) */}
         {regularNews.length > 0 && (
-          <div className="flex flex-col gap-12 border-t-2 border-gray-100 pt-12">
+          <div className="flex flex-col gap-10 border-t-2 border-gray-100 pt-12">
             {regularNews.map((item, index) => (
               <motion.article
                 key={item._id}
@@ -263,7 +252,7 @@ const NewsFeed = () => {
         )}
 
         {/* Cargar más o Loader */}
-        <div className="mt-20 mb-10 text-center border-t border-gray-100 pt-16">
+        <div className="mt-20 mb-5 text-center border-t border-gray-100 pt-16">
           {isLoading && news.length > 0 && (
             <div className="flex justify-center mb-6">
               <Loader2 className="w-10 h-10 text-nyg-red animate-spin" />
@@ -279,6 +268,9 @@ const NewsFeed = () => {
           )}
         </div>
       </div>
+
+      {/* Sponsors */}
+      <SponsorsBar />
     </div>
   );
 };
