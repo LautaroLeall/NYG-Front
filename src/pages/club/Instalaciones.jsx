@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, MapPin } from "lucide-react";
 
@@ -34,7 +34,7 @@ const Instalaciones = () => {
     <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera / Hero alineado con Historia */}
       <div
-        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover md:bg-fixed"
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
@@ -116,7 +116,12 @@ const Instalaciones = () => {
                 familia al club. Nuestras secretarías atienden de Lunes a
                 Viernes de 18:00 a 22:00hs.
               </p>
-              <a className="bg-nyg-red text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-red-700 transition-colors shadow-lg inline-flex items-center gap-2" href="https://maps.app.goo.gl/oa2nUaJ3peYNcTmQ8" target="_blank" rel="noreferrer">
+              <a
+                className="bg-nyg-red text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-red-700 transition-colors shadow-lg inline-flex items-center gap-2"
+                href="https://maps.app.goo.gl/oa2nUaJ3peYNcTmQ8"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <MapPin size={20} /> Abrir en Google Maps
               </a>
             </div>
