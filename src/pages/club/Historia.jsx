@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { ArrowLeft, Quote } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -7,7 +7,7 @@ const Historia = () => {
     <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera / Hero de Historia */}
       <div
-        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover md:bg-fixed"
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
@@ -174,6 +174,38 @@ const Historia = () => {
               y en un aporte constante de jugadores a los diferentes
               seleccionados. Su presidente actual, Raúl Basilio, continúa la
               tradición de dirigentes de gran envergadura.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2
+              id="era-dorada"
+              className="text-3xl font-extrabold text-nyg-blue border-b-2 border-gray-100 pb-4 mt-12 mb-6 scroll-mt-24"
+            >
+              La Era Dorada y la Conquista Nacional (2024-2026)
+            </h2>
+            <p>
+              En los ultimos años, Natación y Gimnasia experimenta una profunda
+              transformación que lo catapultó como uno de los grandes
+              protagonistas del rugby. El equipo encadena tres finales
+              consecutivas, consolidándose en los escenarios donde se deciden
+              los títulos: disputó la final del Regional 2025 frente a Tucuman
+              Rugby, conquistó el Anual 2026 frente a Huirapuca, y corono este
+              ciclo de forma inolvidable.
+            </p>
+            <p>
+              Bajo la lluvia, en La Caldera del Parque, los "Blancos" vencieron
+              23-15 a Lawn Tennis, consagrandose campeones del{" "}
+              <strong>Torneo del Interior B</strong>. Este hito representa el{" "}
+              <strong>primer titulo nacional</strong> en la historia del club,
+              demostrando que Natacion no solo sabe golpear en los momentos
+              justos, sino que aprendio a resistir y dominar en las instancias
+              definitivas del rugby Argentino.
             </p>
           </motion.div>
 
