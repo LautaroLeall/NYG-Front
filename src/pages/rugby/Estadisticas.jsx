@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Trophy, Loader2 } from "lucide-react";
@@ -60,7 +60,7 @@ const Estadisticas = () => {
     <div className="w-full bg-gray-50 pb-20 overflow-hidden min-h-screen">
       {/* Cabecera / Hero Unificada */}
       <div
-        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover md:bg-fixed"
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
@@ -122,7 +122,7 @@ const Estadisticas = () => {
           </div>
         </motion.div>
 
-        {/* Selector de Estadística (Horizontal Inline) */}
+        {/* Selector de Estadistica (Horizontal Inline) */}
         <div className="flex flex-wrap items-center justify-center gap-4 mb-20 border-b border-gray-100 pb-6">
           {STAT_TYPES.map((type) => (
             <button
