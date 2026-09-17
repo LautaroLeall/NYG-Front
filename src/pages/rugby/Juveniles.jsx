@@ -101,7 +101,7 @@ const Juveniles = () => {
             <p className="text-gray-600 text-lg leading-relaxed">
               Nuestros entrenadores trabajan bajo un sistema unificado que
               prepara a los chicos para dar el salto al Plantel Superior,
-              manteniendo intactos los valores histÃ³ricos del club.
+              manteniendo intactos los valores históricos del club.
             </p>
           </div>
 
