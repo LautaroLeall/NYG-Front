@@ -17,7 +17,7 @@ const getShield = (teamName, shieldUrl) => {
   const name = teamName.toLowerCase();
   if (name.includes("nataci") || name.includes("gimnasia"))
     return "/escudos/nyg.png";
-  if (name.includes("tucumÃ¡n rugby") || name.includes("tucuman rugby"))
+  if (name.includes("tucumán rugby") || name.includes("tucuman rugby"))
     return "/escudos/tuc-rugby.png";
   if (name.includes("lince")) return "/escudos/lince.png";
   if (name.includes("huirapuca")) return "/escudos/huirapuca.png";
