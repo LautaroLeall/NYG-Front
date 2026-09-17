@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Smile, Heart, Shield, Users } from "lucide-react";
 
@@ -23,7 +23,6 @@ const RugbyBallIcon = ({ size = 24, className = "" }) => (
   </svg>
 );
 
-// Clases de Tailwind estáticas para evitar que desaparezcan con el hover
 const PILARES = [
   {
     title: "Diversión",
@@ -75,7 +74,7 @@ const Infantiles = () => {
     <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera / Hero Unificada */}
       <div
-        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover md:bg-fixed"
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
@@ -192,12 +191,6 @@ const Infantiles = () => {
             Vení a probar un entrenamiento sin compromiso. Te aseguramos que él
             va a encontrar un grupo espectacular, y vos, una gran familia.
           </p>
-          <Link
-            to="/contacto"
-            className="inline-block border-2 border-nyg-red text-nyg-red font-black text-lg px-12 py-4 rounded-full hover:bg-nyg-red hover:text-white transition-colors duration-300 uppercase tracking-widest shadow-sm"
-          >
-            Consultar Horarios
-          </Link>
         </motion.div>
       </div>
     </div>
