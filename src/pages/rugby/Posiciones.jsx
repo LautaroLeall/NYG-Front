@@ -78,7 +78,7 @@ const Posiciones = () => {
     <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera */}
       <div
-        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover md:bg-fixed"
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
@@ -108,19 +108,19 @@ const Posiciones = () => {
         </Link>
         {/* Selector de Torneo (Tabs / Botones) */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-12 flex flex-col md:flex-row items-center justify-between gap-6 bg-white p-2 rounded-full shadow-lg border border-gray-100"
+          className="mb-12 flex flex-col md:flex-row items-center justify-between gap-6"
         >
-          <div className="flex flex-wrap items-center justify-center gap-2 w-full md:w-auto">
+          <div className="flex flex-wrap items-center justify-center gap-2 bg-white p-1.5 rounded-full shadow-lg border border-gray-100">
             {tournaments.map((t) => (
               <button
                 key={t._id}
                 onClick={() => setSelectedTournament(t)}
-                className={`px-6 py-3 rounded-full font-bold uppercase tracking-widest text-xs md:text-sm transition-all duration-300 ${
+                className={`px-5 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 ${
                   selectedTournament?._id === t._id
                     ? "bg-nyg-blue text-white shadow-md"
-                    : "bg-transparent text-gray-500 hover:text-nyg-blue hover:bg-gray-50"
+                    : "bg-transparent text-gray-400 hover:text-nyg-blue hover:bg-gray-50"
                 }`}
               >
                 {t.name}
@@ -130,7 +130,7 @@ const Posiciones = () => {
 
           <Link
             to="/rugby/fixture"
-            className="hidden md:inline-flex px-6 py-3 bg-nyg-red text-white rounded-full font-black uppercase tracking-widest text-xs hover:bg-nyg-gold hover:text-nyg-blue transition-colors shrink-0 shadow-md mr-2"
+            className="px-6 py-3 bg-nyg-red text-white rounded-full font-black uppercase tracking-widest text-xs hover:bg-nyg-gold hover:text-nyg-blue transition-colors shadow-md text-center"
           >
             Ver Fixture
           </Link>
