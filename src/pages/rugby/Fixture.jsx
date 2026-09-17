@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ const getShield = (teamName, shieldUrl) => {
   const name = teamName.toLowerCase();
   if (name.includes("nataci") || name.includes("gimnasia"))
     return "/escudos/nyg.png";
-  if (name.includes("tucumán rugby") || name.includes("tucuman rugby"))
+  if (name.includes("tucumÃ¡n rugby") || name.includes("tucuman rugby"))
     return "/escudos/tuc-rugby.png";
   if (name.includes("lince")) return "/escudos/lince.png";
   if (name.includes("huirapuca")) return "/escudos/huirapuca.png";
@@ -67,7 +67,7 @@ const Fixture = () => {
     <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera / Hero Unificada */}
       <div
-        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover md:bg-fixed"
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
@@ -129,7 +129,8 @@ const Fixture = () => {
                 const locationText = isLocal ? "Local" : "Visitante";
 
                 return (
-                  <div
+                  <Link
+                    to={`/rugby/partido/${match._id}`}
                     key={match._id}
                     className={`flex flex-col md:flex-row items-center border-b border-gray-100 last:border-b-0 p-6 md:p-8 hover:bg-gray-50 transition-colors relative md:border-l-8 
                   ${idx === 0 ? "md:border-l-nyg-red" : idx === 1 ? "md:border-l-gray-300" : "md:border-l-nyg-blue"}
@@ -193,7 +194,7 @@ const Fixture = () => {
                         <MapPin size={16} /> {locationText}
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 );
               })
             )}
@@ -238,7 +239,8 @@ const Fixture = () => {
                   (isAwayUs && match.awayScore > match.homeScore);
 
                 return (
-                  <div
+                  <Link
+                    to={`/rugby/partido/${match._id}`}
                     key={match._id}
                     className={`flex flex-col md:flex-row items-center border-b border-gray-100 last:border-b-0 p-6 md:p-8 hover:bg-gray-50 transition-colors relative md:border-l-8 ${idx === 0 ? "md:border-l-nyg-red" : idx === 1 ? "md:border-l-gray-300" : "md:border-l-nyg-blue"}`}
                   >
@@ -310,7 +312,7 @@ const Fixture = () => {
                         {won ? "Victoria" : "Derrota"}
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 );
               })
             )}
