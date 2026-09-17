@@ -70,17 +70,17 @@ const NewsList = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
         <div>
-          <h1 className="text-2xl font-black text-gray-800 flex items-center gap-3">
-            <Newspaper className="text-nyg-red" />
+          <h1 className="text-2xl font-black text-nyg-blue uppercase tracking-widest flex items-center gap-3">
+            <Newspaper className="w-8 h-8" />
             Gestión de Noticias
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm font-bold text-gray-400 tracking-wider">
             Crea, edita y publica las notas del club.
           </p>
         </div>
         <Link
           to="/admin/noticias/nueva"
-          className="flex items-center gap-2 bg-nyg-red hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-bold transition-colors shadow-md shadow-red-200"
+          className="flex items-center justify-center gap-2 px-6 py-3 bg-nyg-blue hover:bg-blue-800 text-white rounded-full font-black uppercase tracking-widest text-sm shadow-md hover:shadow-xl transition-all"
         >
           <Plus size={20} />
           Redactar Nota
@@ -92,14 +92,28 @@ const NewsList = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
-                <th className="p-4 font-bold">Portada</th>
-                <th className="p-4 font-bold">Título</th>
-                <th className="p-4 font-bold">Categoría</th>
-                <th className="p-4 font-bold text-center">Estado</th>
-                <th className="p-4 font-bold text-center">Destacada</th>
-                <th className="p-4 font-bold">Fecha</th>
-                <th className="p-4 font-bold text-right">Acciones</th>
+              <tr className="border-b-2 border-gray-100">
+                <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest">
+                  Portada
+                </th>
+                <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest">
+                  Título
+                </th>
+                <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest">
+                  Categoría
+                </th>
+                <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest text-center">
+                  Estado
+                </th>
+                <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest text-center">
+                  Destacada
+                </th>
+                <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest">
+                  Fecha
+                </th>
+                <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm">
@@ -124,7 +138,7 @@ const NewsList = () => {
                 news.map((item) => (
                   <tr
                     key={item._id}
-                    className="hover:bg-gray-50/50 transition-colors group"
+                    className="border-b border-gray-50 hover:bg-gray-50 transition-colors group"
                   >
                     <td className="p-4">
                       <div className="w-16 h-12 bg-gray-100 rounded-lg overflow-hidden shadow-sm">
