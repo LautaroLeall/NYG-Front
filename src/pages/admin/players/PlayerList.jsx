@@ -7,6 +7,7 @@ import {
   Trash2,
   Loader2,
   AlertCircle,
+  Users,
 } from "lucide-react";
 import axios from "../../../api/axiosConfig";
 
@@ -59,16 +60,17 @@ const PlayerList = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-black text-nyg-blue uppercase tracking-wider">
+          <h1 className="text-2xl font-black text-nyg-blue uppercase tracking-widest flex items-center gap-3">
+            <Users className="w-8 h-8" />
             Planteles
           </h1>
-          <p className="text-gray-400 font-bold uppercase tracking-widest text-sm mt-1">
+          <p className="text-sm font-bold text-gray-400 tracking-wider">
             Gestión de Jugadores
           </p>
         </div>
         <Link
           to="/admin/planteles/nuevo"
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-nyg-blue hover:bg-blue-800 text-white rounded-full font-black uppercase tracking-widest text-sm transition-all shadow-md hover:shadow-xl hover:-translate-y-1"
+          className="flex items-center justify-center gap-2 px-6 py-3 bg-nyg-blue hover:bg-blue-800 text-white rounded-full font-black uppercase tracking-widest text-sm shadow-md hover:shadow-xl transition-all"
         >
           <Plus size={18} /> Nuevo Jugador
         </Link>
@@ -126,8 +128,8 @@ const PlayerList = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">
+                <tr className="border-b-2 border-gray-100">
+                  <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest">
                     Jugador
                   </th>
                   <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest hidden md:table-cell">
@@ -136,10 +138,10 @@ const PlayerList = () => {
                   <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest hidden lg:table-cell">
                     Posición
                   </th>
-                  <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">
+                  <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest">
                     Estado
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-black text-gray-400 uppercase tracking-widest">
+                  <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
                     Acciones
                   </th>
                 </tr>
@@ -148,7 +150,7 @@ const PlayerList = () => {
                 {players.map((player) => (
                   <tr
                     key={player._id}
-                    className="hover:bg-gray-50/50 transition-colors group"
+                    className="border-b border-gray-50 hover:bg-gray-50 transition-colors group"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
