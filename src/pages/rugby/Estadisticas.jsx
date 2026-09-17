@@ -122,7 +122,7 @@ const Estadisticas = () => {
           </div>
         </motion.div>
 
-        {/* Selector de EstadÃ­stica (Horizontal Inline) */}
+        {/* Selector de Estadistica (Horizontal Inline) */}
         <div className="flex flex-wrap items-center justify-center gap-4 mb-20 border-b border-gray-100 pb-6">
           {STAT_TYPES.map((type) => (
             <button
