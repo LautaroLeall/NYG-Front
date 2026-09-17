@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -65,7 +65,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden bg-[url('/img-club1.png')] bg-cover bg-center bg-fixed">
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden bg-[url('/img-club1.png')] bg-cover bg-center md:bg-fixed">
       {/* Capa superpuesta blanca para mantener la luminosidad del diseño */}
       <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-0"></div>
 
