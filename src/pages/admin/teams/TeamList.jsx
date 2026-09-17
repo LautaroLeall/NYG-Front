@@ -8,6 +8,7 @@ import {
   Edit2,
   Trash2,
   Loader2,
+  Shield,
   AlertCircle,
 } from "lucide-react";
 
@@ -70,16 +71,17 @@ const TeamList = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-black text-nyg-blue uppercase tracking-tight">
+          <h1 className="text-2xl font-black text-nyg-blue uppercase tracking-widest flex items-center gap-3">
+            <Shield className="w-8 h-8" />
             Equipos y Clubes
           </h1>
-          <p className="text-gray-500 font-medium mt-1">
+          <p className="text-sm font-bold text-gray-400 tracking-wider">
             Gestión de planteles propios y clubes rivales
           </p>
         </div>
         <Link
           to="/admin/equipos/nuevo"
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-nyg-blue hover:bg-blue-800 text-white rounded-full font-black uppercase tracking-widest text-sm transition-all shadow-md hover:shadow-xl hover:-translate-y-1"
+          className="flex items-center justify-center gap-2 px-6 py-3 bg-nyg-blue hover:bg-blue-800 text-white rounded-full font-black uppercase tracking-widest text-sm shadow-md hover:shadow-xl transition-all"
         >
           <Plus size={18} /> Nuevo Equipo
         </Link>
@@ -108,7 +110,7 @@ const TeamList = () => {
             onChange={(e) => setFilterType(e.target.value)}
             className="block w-full px-6 py-3 bg-gray-50 border-2 border-transparent rounded-full text-gray-800 font-bold uppercase tracking-wider text-sm focus:outline-none focus:bg-white focus:border-nyg-blue transition-all cursor-pointer appearance-none"
           >
-            <option value="">Todos (Propios y Rivales)</option>
+            <option value="">Todos</option>
             <option value="own">Equipos NYG</option>
             <option value="rival">Clubes Rivales</option>
           </select>
@@ -150,8 +152,8 @@ const TeamList = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-100">
-                  <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">
+                <tr className="border-b-2 border-gray-100">
+                  <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest">
                     Equipo / Club
                   </th>
                   <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest hidden md:table-cell">
@@ -160,10 +162,10 @@ const TeamList = () => {
                   <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest hidden lg:table-cell">
                     Disciplina
                   </th>
-                  <th className="px-6 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">
+                  <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest">
                     Tipo
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-black text-gray-400 uppercase tracking-widest">
+                  <th className="py-4 px-6 text-xs font-black text-gray-400 uppercase tracking-widest text-right">
                     Acciones
                   </th>
                 </tr>
@@ -172,7 +174,7 @@ const TeamList = () => {
                 {filteredTeams.map((team) => (
                   <tr
                     key={team._id}
-                    className="hover:bg-gray-50/50 transition-colors group"
+                    className="border-b border-gray-50 hover:bg-gray-50 transition-colors group"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
