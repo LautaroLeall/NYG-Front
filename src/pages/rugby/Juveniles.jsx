@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Users, Target, ShieldCheck, Dumbbell } from "lucide-react";
 
@@ -49,7 +49,7 @@ const Juveniles = () => {
     <div className="w-full bg-gray-50 pb-20 overflow-hidden">
       {/* Cabecera / Hero Unificada */}
       <div
-        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover bg-fixed"
+        className="relative h-[50vh] min-h-87.5 flex items-center justify-center bg-center bg-cover md:bg-fixed"
         style={{ backgroundImage: "url('/img-club5.png')" }}
       >
         <div className="absolute inset-0 bg-nyg-blue/90 mix-blend-multiply"></div>
@@ -101,7 +101,7 @@ const Juveniles = () => {
             <p className="text-gray-600 text-lg leading-relaxed">
               Nuestros entrenadores trabajan bajo un sistema unificado que
               prepara a los chicos para dar el salto al Plantel Superior,
-              manteniendo intactos los valores históricos del club.
+              manteniendo intactos los valores histÃ³ricos del club.
             </p>
           </div>
 
@@ -173,15 +173,9 @@ const Juveniles = () => {
             ¿Querés sumarte al club?
           </h2>
           <p className="text-gray-500 text-xl md:text-2xl font-light max-w-2xl mx-auto mb-10 leading-relaxed">
-            Vení a entrenar con nosotros. Sin importar tu experiencia previa,
-            en Natación y Gimnasia siempre hay lugar para vos.
+            Vení a entrenar con nosotros. Sin importar tu experiencia previa, en
+            Natación y Gimnasia siempre hay lugar para vos.
           </p>
-          <Link
-            to="/contacto"
-            className="inline-block border-2 border-nyg-red text-nyg-red font-black text-lg px-12 py-4 rounded-full hover:bg-nyg-red hover:text-white transition-colors duration-300 uppercase tracking-widest shadow-sm"
-          >
-            Contactar a Coordinación
-          </Link>
         </motion.div>
       </div>
     </div>
