@@ -6,31 +6,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/es";
 dayjs.locale("es");
 
-// DICCIONARIO DE ESCUDOS
-const getShield = (teamName, shieldUrl) => {
-  if (shieldUrl) return shieldUrl;
-  if (!teamName)
-    return "https://ui-avatars.com/api/?name=NA&background=F3F4F6&color=9CA3AF&size=150";
-
-  const name = teamName.toLowerCase();
-  if (name.includes("nataci") || name.includes("gimnasia"))
-    return "/escudos/nyg.png";
-  if (name.includes("tucumán rugby") || name.includes("tucuman rugby"))
-    return "/escudos/tucumanrugby.png";
-  if (name.includes("universitario")) return "/escudos/universitario.png";
-  if (name.includes("huirapuca")) return "/escudos/huirapuca.png";
-  if (name.includes("tarcos")) return "/escudos/lostarcos.png";
-  if (name.includes("lawn tennis")) return "/escudos/lawntennis.png";
-  if (name.includes("jockey")) return "/escudos/jockeyclub.png";
-  if (name.includes("cardenales")) return "/escudos/cardenales.png";
-  if (name.includes("corsarios")) return "/escudos/corsarios.png";
-  if (name.includes("linses") || name.includes("lince"))
-    return "/escudos/lince.png";
-
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(
-    teamName,
-  )}&background=F3F4F6&color=9CA3AF&size=150`;
-};
+import { getShield } from "../../utils/shieldDictionary";
 
 const ResultCard = ({ match }) => {
   const isHomeNYG =

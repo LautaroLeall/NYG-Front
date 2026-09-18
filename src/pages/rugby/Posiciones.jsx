@@ -5,27 +5,7 @@ import { ArrowLeft, Info } from "lucide-react";
 import axios from "../../api/axiosConfig";
 import dayjs from "dayjs";
 
-// Helper para obtener escudos
-const getShield = (teamName, shieldUrl) => {
-  if (shieldUrl) return shieldUrl;
-  if (!teamName)
-    return "https://ui-avatars.com/api/?name=NA&background=F3F4F6&color=9CA3AF&size=150";
-
-  const name = teamName.toLowerCase();
-  if (name.includes("nataci") || name.includes("gimnasia"))
-    return "/escudos/nyg.png";
-  if (name.includes("tucumán rugby") || name.includes("tucuman rugby"))
-    return "/escudos/tuc-rugby.png";
-  if (name.includes("lince")) return "/escudos/lince.png";
-  if (name.includes("huirapuca")) return "/escudos/huirapuca.png";
-  if (name.includes("universitario")) return "/escudos/universitario-tuc.png";
-  if (name.includes("cardenales")) return "/escudos/cardenales.png";
-  if (name.includes("jockey")) return "/escudos/jockey-rosario.png";
-  if (name.includes("lawn tennis")) return "/escudos/tuc-lawn-tenis.png";
-  if (name.includes("tarcos")) return "/escudos/tarcos.png";
-
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(teamName)}&background=F3F4F6&color=9CA3AF&size=150`;
-};
+import { getShield } from "../../utils/shieldDictionary";
 
 const Posiciones = () => {
   const [tournaments, setTournaments] = useState([]);
