@@ -60,6 +60,17 @@ axiosInstance.interceptors.response.use(
         pendingRequests.delete(error.config.requestKey);
       }
     }
+
+    // Manejo global de expiración de sesión (401 Unauthorized)
+    if (error.response && error.response.status === 401) {
+      // Evitar loop infinito si ya estamos en la página de login
+      if (window.location.pathname !== '/admin/login') {
+        toast.error("Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.");
+        useAuthStore.getState().logout();
+        window.location.href = '/admin/login';
+      }
+    }
+
     return Promise.reject(error);
   }
 );
