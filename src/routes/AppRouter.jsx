@@ -16,6 +16,7 @@ import FichaJugador from "../pages/rugby/FichaJugador";
 import DetallePartido from "../pages/rugby/DetallePartido";
 import NewsFeed from "../pages/noticias/NewsFeed";
 import NewsArticle from "../pages/noticias/NewsArticle";
+import Sumate from "../pages/club/Sumate";
 
 import Instalaciones from "../pages/club/Instalaciones";
 import Comision from "../pages/club/Comision";
@@ -25,6 +26,7 @@ import Login from "../pages/admin/auth/Login";
 import AdminLayout from "../components/layout/AdminLayout";
 import RequireAuth from "../components/admin/RequireAuth";
 import Dashboard from "../pages/admin/Dashboard";
+import MessagesInbox from "../pages/admin/MessagesInbox";
 
 // Admin - Planteles
 import PlayerList from "../pages/admin/players/PlayerList";
@@ -42,11 +44,12 @@ import TournamentForm from "../pages/admin/tournaments/TournamentForm";
 import MatchList from "../pages/admin/matches/MatchList";
 import MatchForm from "../pages/admin/matches/MatchForm";
 import MatchResultForm from "../pages/admin/matches/MatchResultForm";
-import MatchStatsForm from "../pages/admin/matches/MatchStatsForm";
+import MatchUnifiedForm from "../pages/admin/matches/MatchUnifiedForm";
 
 // Admin - Noticias
 import NewsList from "../pages/admin/news/NewsList";
 import NewsForm from "../pages/admin/news/NewsForm";
+import AlertasList from "../pages/admin/AlertasList";
 
 const AppRouter = () => {
   return (
@@ -82,24 +85,16 @@ const AppRouter = () => {
               path="partidos/resultado/:id"
               element={<MatchResultForm />}
             />
-            <Route
-              path="partidos/estadisticas/:id"
-              element={<MatchStatsForm />}
-            />
+            <Route path="partidos/ficha/:id" element={<MatchUnifiedForm />} />
 
             {/* Rutas ABM Noticias */}
             <Route path="noticias" element={<NewsList />} />
             <Route path="noticias/nueva" element={<NewsForm />} />
             <Route path="noticias/editar/:id" element={<NewsForm />} />
 
-            <Route
-              path="alertas"
-              element={
-                <div className="text-gray-800 p-4">
-                  Sección Alertas Disciplinarias
-                </div>
-              }
-            />
+            <Route path="mensajes" element={<MessagesInbox />} />
+
+            <Route path="alertas" element={<AlertasList />} />
           </Route>
         </Route>
 
@@ -115,6 +110,7 @@ const AppRouter = () => {
           <Route path="/el-club/instalaciones" element={<Instalaciones />} />
           <Route path="/el-club/comision" element={<Comision />} />
           <Route path="/el-club/cuerpo-tecnico" element={<CuerpoTecnico />} />
+          <Route path="/sumate" element={<Sumate />} />
 
           {/* Noticias */}
           <Route path="/noticias" element={<NewsFeed />} />
