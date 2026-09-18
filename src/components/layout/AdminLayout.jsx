@@ -9,7 +9,7 @@ import {
   Trophy,
   Newspaper,
   Bell,
-  Settings,
+  ExternalLink,
 } from "lucide-react";
 
 const AdminLayout = () => {
@@ -34,7 +34,8 @@ const AdminLayout = () => {
       path: "/admin/noticias",
       icon: <Newspaper size={20} />,
     },
-    { name: "Alertas", path: "/admin/alertas", icon: <Bell size={20} /> },
+    { name: "Mensajes", path: "/admin/mensajes", icon: <Bell size={20} /> },
+    { name: "Alertas", path: "/admin/alertas", icon: <Shield size={20} /> },
   ];
 
   return (
@@ -99,17 +100,25 @@ const AdminLayout = () => {
               Panel de Control
             </h2>
           </div>
-          <div className="flex items-center gap-6">
-            <button className="text-gray-400 hover:text-nyg-blue transition-colors">
-              <Settings size={22} />
+          <div className="flex items-center gap-4">
+            <Link
+              to="/"
+              target="_blank"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-50 text-gray-600 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-nyg-blue hover:text-white transition-all shadow-sm"
+              title="Ver sitio web"
+            >
+              <ExternalLink size={16} />
+              <span className="hidden sm:inline">Ver Web</span>
+            </Link>
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-red-50 text-nyg-red rounded-full text-xs font-bold uppercase tracking-widest hover:bg-nyg-red hover:text-white transition-all shadow-sm"
+              title="Cerrar Sesión"
+            >
+              <LogOut size={16} />
+              <span className="hidden sm:inline">Salir</span>
             </button>
-            <div className="w-10 h-10 rounded-full bg-gray-100 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center">
-              <img
-                src="https://ui-avatars.com/api/?name=Admin&background=1E3A8A&color=fff"
-                alt="Admin"
-                className="w-full h-full object-cover"
-              />
-            </div>
           </div>
         </header>
 
