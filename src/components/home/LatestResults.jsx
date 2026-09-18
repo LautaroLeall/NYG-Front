@@ -61,41 +61,41 @@ const ResultCard = ({ match }) => {
       {/* Resultados */}
       <div className="flex flex-col gap-4 my-6">
         <div className="flex justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <img
               src={getShield(
                 match.homeTeam?.name,
                 match.homeTeam?.shieldUrl || match.homeTeam?.logo,
               )}
               alt={match.homeTeam?.name}
-              className="w-8 h-8 object-contain drop-shadow-sm"
+              className="w-8 h-8 object-contain drop-shadow-sm shrink-0"
             />
             <span className={`text-lg truncate ${localClass}`}>
               {match.homeTeam?.name || "Local"}
             </span>
           </div>
           <span
-            className={`text-2xl font-black ${match.homeScore > match.awayScore ? "text-nyg-blue" : "text-gray-400"}`}
+            className={`text-2xl font-black shrink-0 ${match.homeScore > match.awayScore ? "text-nyg-blue" : "text-gray-400"}`}
           >
             {match.homeScore !== null ? match.homeScore : "-"}
           </span>
         </div>
         <div className="flex justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <img
               src={getShield(
                 match.awayTeam?.name,
                 match.awayTeam?.shieldUrl || match.awayTeam?.logo,
               )}
               alt={match.awayTeam?.name}
-              className="w-8 h-8 object-contain drop-shadow-sm"
+              className="w-8 h-8 object-contain drop-shadow-sm shrink-0"
             />
             <span className={`text-lg truncate ${awayClass}`}>
               {match.awayTeam?.name || "Visitante"}
             </span>
           </div>
           <span
-            className={`text-2xl font-black ${match.awayScore > match.homeScore ? "text-nyg-blue" : "text-gray-400"}`}
+            className={`text-2xl font-black shrink-0 ${match.awayScore > match.homeScore ? "text-nyg-blue" : "text-gray-400"}`}
           >
             {match.awayScore !== null ? match.awayScore : "-"}
           </span>
