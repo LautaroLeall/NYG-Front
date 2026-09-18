@@ -12,15 +12,57 @@ import {
   AlertCircle,
   ChevronDown,
   Calendar,
+  Users,
 } from "lucide-react";
 
 const playerSchema = z.object({
-  name: z.string().min(2, { message: "El nombre es obligatorio" }),
-  birthDate: z.string().optional(),
+  name: z
+    .string()
+    .min(2, { message: "El nombre es obligatorio" })
+    .regex(
+      /^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/,
+      "El nombre no debe contener números ni símbolos",
+    ),
+  birthDate: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const date = new Date(val);
+        const today = new Date();
+        const age = today.getFullYear() - date.getFullYear();
+        return age >= 4 && age <= 60;
+      },
+      {
+        message:
+          "La fecha de nacimiento es irreal (edad fuera del rango 4-60 años)",
+      },
+    ),
   position: z.string().min(1, { message: "Seleccione una posición" }),
   category: z.string().min(1, { message: "Seleccione una categoría" }),
-  weight: z.string().optional(),
-  height: z.string().optional(),
+  weight: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const num = parseFloat(val);
+        return num >= 40 && num <= 160;
+      },
+      { message: "El peso debe ser realista (40 - 160 kg)" },
+    ),
+  height: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const num = parseInt(val);
+        return num >= 120 && num <= 230;
+      },
+      { message: "La altura debe ser realista (120 - 230 cm)" },
+    ),
   isActive: z.boolean().default(true),
 });
 
@@ -159,7 +201,7 @@ const PlayerForm = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
+    <div className="max-w-5xl mx-auto space-y-6 md:space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -170,9 +212,13 @@ const PlayerForm = () => {
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-2xl md:text-3xl font-black text-nyg-blue uppercase tracking-wider">
+            <h1 className="text-2xl font-black text-nyg-blue uppercase tracking-widest flex items-center gap-3">
+              <Users className="w-8 h-8" />
               {isEditing ? "Editar Jugador" : "Nuevo Jugador"}
             </h1>
+            <p className="text-sm font-bold text-gray-400 tracking-wider">
+              Gestión de información personal y deportiva
+            </p>
           </div>
         </div>
       </div>
