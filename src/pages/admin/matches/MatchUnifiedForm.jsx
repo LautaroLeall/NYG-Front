@@ -45,10 +45,13 @@ const MatchUnifiedForm = () => {
       const fetchedPlayers = playersRes.data.data || [];
       setPlayers(fetchedPlayers);
 
-      // Map roster
       const initialRoster = {};
       fetchedPlayers.forEach((p) => {
-        initialRoster[p._id] = { isSelected: false, isStarter: false };
+        initialRoster[p._id] = {
+          isSelected: false,
+          isStarter: false,
+          shirtNumber: "",
+        };
       });
       if (m.roster && m.roster.length > 0) {
         m.roster.forEach((r) => {
@@ -56,6 +59,7 @@ const MatchUnifiedForm = () => {
             initialRoster[r.player?._id || r.player] = {
               isSelected: true,
               isStarter: r.isStarter,
+              shirtNumber: r.shirtNumber || "",
             };
           }
         });
@@ -129,7 +133,7 @@ const MatchUnifiedForm = () => {
           setIsSaving(false);
           return toast.error("El minuto de un evento debe estar entre 0 y 120");
         }
-        if (!e.teamId) {
+        if (!e.team) {
           setIsSaving(false);
           return toast.error(
             "Debe asignar a qué equipo pertenece cada evento.",
@@ -161,8 +165,13 @@ const MatchUnifiedForm = () => {
           if (e.type === "Penal" || e.type === "Drop") points = 3;
           if (e.type === "Try Penal") points = 7;
 
-          if (e.teamId === match.homeTeam._id) calcHomeScore += points;
-          if (e.teamId === match.awayTeam._id) calcAwayScore += points;
+          if (match.isHomeMatch) {
+            if (e.team === "NYG") calcHomeScore += points;
+            else if (e.team === "RIVAL") calcAwayScore += points;
+          } else {
+            if (e.team === "NYG") calcAwayScore += points;
+            else if (e.team === "RIVAL") calcHomeScore += points;
+          }
         }
 
         // Si el usuario cargó 0-0 y no hay eventos, lo dejamos pasar.
@@ -180,6 +189,21 @@ const MatchUnifiedForm = () => {
         }
       }
 
+      // Validate unique shirt numbers
+      const selectedNumbers = new Set();
+      for (const pId of Object.keys(roster)) {
+        if (roster[pId].isSelected && roster[pId].shirtNumber) {
+          const num = Number(roster[pId].shirtNumber);
+          if (selectedNumbers.has(num)) {
+            setIsSaving(false);
+            return toast.error(
+              `El número de camiseta ${num} está repetido. Cada jugador convocado debe tener un número único.`,
+            );
+          }
+          selectedNumbers.add(num);
+        }
+      }
+
       // Format Roster
       const finalRoster = [];
       Object.keys(roster).forEach((pId) => {
@@ -187,6 +211,9 @@ const MatchUnifiedForm = () => {
           finalRoster.push({
             player: pId,
             isStarter: roster[pId].isStarter,
+            shirtNumber: roster[pId].shirtNumber
+              ? Number(roster[pId].shirtNumber)
+              : undefined,
           });
         }
       });
@@ -333,6 +360,27 @@ const MatchUnifiedForm = () => {
                       className="w-4 h-4 text-nyg-gold rounded"
                     />
                   </label>
+                  {roster[player._id]?.isSelected && (
+                    <div className="flex flex-col items-center gap-1 ml-2 pl-2 border-l border-gray-100">
+                      <span className="text-[10px] font-black uppercase text-gray-400">
+                        Camiseta
+                      </span>
+                      <input
+                        type="number"
+                        min="1"
+                        max="99"
+                        value={roster[player._id]?.shirtNumber}
+                        onChange={(e) =>
+                          handleRosterChange(
+                            player._id,
+                            "shirtNumber",
+                            e.target.value,
+                          )
+                        }
+                        className="w-12 p-1 border border-gray-300 rounded-md text-center font-bold text-sm focus:ring-2 focus:ring-nyg-blue focus:outline-none bg-white"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
