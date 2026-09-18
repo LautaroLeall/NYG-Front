@@ -8,18 +8,23 @@ import toast from "react-hot-toast";
 import { Loader2, Save, ChevronDown, Trophy } from "lucide-react";
 
 const tournamentSchema = z.object({
-  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
+  name: z
+    .string()
+    .min(2, "El nombre debe tener al menos 2 caracteres")
+    .max(80, "Nombre demasiado largo"),
   season: z
     .number({
       invalid_type_error: "La temporada debe ser un número",
     })
-    .min(2000, "Temporada inválida"),
+    .min(2000, "Temporada inválida")
+    .max(2050, "Temporada demasiado lejana en el futuro"),
   level: z.string().min(1, "Debe seleccionar un nivel"),
   category: z.string().min(1, "Debe seleccionar una categoría"),
   discipline: z.string().min(1, "Debe seleccionar una disciplina"),
   pointsRule: z.string().min(1, "Debe seleccionar las reglas de puntuación"),
   tiebreakRule: z.string().min(1, "Debe seleccionar las reglas de desempate"),
   isArchived: z.boolean(),
+  isFeatured: z.boolean(),
 });
 
 const CATEGORIAS = [
@@ -62,6 +67,7 @@ const TournamentForm = () => {
       pointsRule: "",
       tiebreakRule: "",
       isArchived: false,
+      isFeatured: false,
     },
   });
 
@@ -99,6 +105,7 @@ const TournamentForm = () => {
       setValue("pointsRule", data.pointsRule?._id || data.pointsRule);
       setValue("tiebreakRule", data.tiebreakRule?._id || data.tiebreakRule);
       setValue("isArchived", data.isArchived);
+      setValue("isFeatured", data.isFeatured || false);
     } catch (error) {
       toast.error("Error al cargar el torneo");
       navigate("/admin/torneos");
@@ -324,24 +331,48 @@ const TournamentForm = () => {
             </div>
           </div>
 
-          <div className="mt-8 p-6 bg-gray-50 rounded-3xl border border-gray-100 flex items-center justify-between">
-            <div>
-              <h4 className="text-sm font-bold text-gray-800 uppercase tracking-wider">
-                Torneo Archivado
-              </h4>
-              <p className="text-xs text-gray-500 font-medium mt-1">
-                Al archivar, no aparecerá en las tablas principales del sitio
-                público.
-              </p>
+          <div className="mt-8 space-y-4">
+            <div className="p-6 bg-nyg-gold/10 rounded-3xl border border-nyg-gold/20 flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-bold text-nyg-gold uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-nyg-gold animate-pulse"></span>
+                  Torneo Destacado (Portada)
+                </h4>
+                <p className="text-xs text-gray-600 font-medium mt-1">
+                  Al activarlo, este torneo y sus posiciones se mostrarán en la
+                  portada principal. Desactivará otros torneos de la misma
+                  disciplina.
+                </p>
+              </div>
+              <label className="relative inline-block w-12 h-6 cursor-pointer shrink-0">
+                <input
+                  type="checkbox"
+                  className="peer sr-only"
+                  {...register("isFeatured")}
+                />
+                <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-nyg-gold"></div>
+              </label>
             </div>
-            <label className="relative inline-block w-12 h-6 cursor-pointer">
-              <input
-                type="checkbox"
-                className="peer sr-only"
-                {...register("isArchived")}
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-nyg-blue"></div>
-            </label>
+
+            <div className="p-6 bg-gray-50 rounded-3xl border border-gray-100 flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-bold text-gray-800 uppercase tracking-wider">
+                  Torneo Archivado
+                </h4>
+                <p className="text-xs text-gray-500 font-medium mt-1">
+                  Al archivar, no aparecerá en las tablas principales del sitio
+                  público.
+                </p>
+              </div>
+              <label className="relative inline-block w-12 h-6 cursor-pointer shrink-0">
+                <input
+                  type="checkbox"
+                  className="peer sr-only"
+                  {...register("isArchived")}
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-nyg-blue"></div>
+              </label>
+            </div>
           </div>
         </div>
 
