@@ -19,7 +19,7 @@ const SplashScreen = ({ onFinish }) => {
 
     wakeUpBackend();
 
-    // El splash screen dura exactamente 5 segundos visualmente y se va
+    // El splash screen dura exactamente 3 segundos visualmente y se va
     const timer = setTimeout(() => {
       if (isMounted) {
         setIsFadingOut(true);
@@ -27,7 +27,7 @@ const SplashScreen = ({ onFinish }) => {
           if (isMounted) onFinish();
         }, 500); // 500ms para la animación de opacidad
       }
-    }, 5000);
+    }, 3000);
 
     return () => {
       isMounted = false;
