@@ -3,7 +3,14 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowLeft, Save, Loader2, Upload, AlertCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  Save,
+  Loader2,
+  Upload,
+  AlertCircle,
+  Newspaper,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "../../../api/axiosConfig";
 import dayjs from "dayjs";
@@ -80,7 +87,7 @@ const NewsForm = () => {
           setIsLoading(true);
           const res = await axios.get(`/api/news/admin/${id}`);
           const item = res.data.data;
-          
+
           if (item) {
             setValue("title", item.title);
             setValue("subtitle", item.subtitle);
@@ -90,7 +97,10 @@ const NewsForm = () => {
             setValue("author", item.author);
             setValue("isPublished", item.isPublished);
             setValue("isFeatured", item.isFeatured);
-            setValue("publishDate", dayjs(item.publishDate).format("YYYY-MM-DD"));
+            setValue(
+              "publishDate",
+              dayjs(item.publishDate).format("YYYY-MM-DD"),
+            );
             setImageUrl(item.imageUrl || "");
           }
         } catch (error) {
@@ -161,9 +171,10 @@ const NewsForm = () => {
       navigate("/admin/noticias");
     } catch (error) {
       const errorData = error.response?.data?.error;
-      const errorMessage = typeof errorData === 'object' && errorData !== null 
-        ? errorData.message 
-        : errorData;
+      const errorMessage =
+        typeof errorData === "object" && errorData !== null
+          ? errorData.message
+          : errorData;
       toast.error(errorMessage || "Error al guardar la noticia");
     } finally {
       setIsLoading(false);
@@ -171,7 +182,7 @@ const NewsForm = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-20">
+    <div className="max-w-5xl mx-auto space-y-6 pb-20">
       {/* Header */}
       <div className="flex items-center gap-4 bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
         <Link
@@ -181,10 +192,11 @@ const NewsForm = () => {
           <ArrowLeft size={24} />
         </Link>
         <div>
-          <h1 className="text-2xl font-black text-gray-800">
+          <h1 className="text-2xl font-black text-nyg-blue uppercase tracking-widest flex items-center gap-3">
+            <Newspaper className="w-8 h-8" />
             {isEditing ? "Editar Noticia" : "Redactar Nueva Noticia"}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm font-bold text-gray-400 tracking-wider">
             {isEditing
               ? "Modifica los datos de la nota existente."
               : "Completa los campos para publicar un nuevo artículo en la web."}
@@ -198,7 +210,7 @@ const NewsForm = () => {
           <div className="md:col-span-2 space-y-6 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             {/* Título */}
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-2">
                 Título de la Noticia <span className="text-nyg-red">*</span>
               </label>
               <input
@@ -218,7 +230,7 @@ const NewsForm = () => {
 
             {/* Subtítulo */}
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-2">
                 Bajada / Subtítulo <span className="text-nyg-red">*</span>
               </label>
               <textarea
@@ -240,7 +252,7 @@ const NewsForm = () => {
 
             {/* Contenido */}
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-2">
                 Cuerpo de la Noticia <span className="text-nyg-red">*</span>
               </label>
               <textarea
@@ -311,7 +323,7 @@ const NewsForm = () => {
             {/* Configuraciones */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-5">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-2">
                   Categoría
                 </label>
                 <select
@@ -327,7 +339,7 @@ const NewsForm = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-2">
                   Disciplina Relacionada
                 </label>
                 <select
@@ -344,7 +356,7 @@ const NewsForm = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-2">
                   Autor
                 </label>
                 <input
@@ -355,7 +367,7 @@ const NewsForm = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-2">
                   Fecha de Publicación
                 </label>
                 <input
