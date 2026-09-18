@@ -244,9 +244,10 @@ const DetallePartido = () => {
     timelineEvents.sort((a, b) => orderVal[a.type] - orderVal[b.type]);
   }
 
+  const rivalTeamName = isHome ? match.awayTeam?.name : match.homeTeam?.name;
   const venue = isHome
     ? "Sede Natación y Gimnasia"
-    : `Visitante - ${match.awayTeam?.name}`;
+    : `Visitante - ${match.homeTeam?.name}`;
 
   return (
     <div className="bg-surface-light min-h-screen pt-24 pb-16">
@@ -421,7 +422,7 @@ const DetallePartido = () => {
                             <p className="text-sm font-medium text-gray-500 mt-1">
                               {isNYG
                                 ? "Natación y Gimnasia"
-                                : match.awayTeam?.name || "Visitante"}
+                                : rivalTeamName || "Rival"}
                             </p>
                           )}
                         </div>
