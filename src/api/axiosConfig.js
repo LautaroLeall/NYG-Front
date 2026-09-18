@@ -19,12 +19,13 @@ axiosInstance.interceptors.request.use(
       config.headers['Authorization'] = `Bearer ${token}`;
     }
 
-    // Configurar timeout de 8s para mostrar el mensaje gracioso
+    // Configurar timeout de 5s para mostrar el mensaje gracioso
     const requestKey = Symbol();
     config.requestKey = requestKey;
 
     const timeoutId = setTimeout(() => {
       toast("Precalentando al pack de forwards... aguantá unos segundos.", {
+        id: 'slow-request-toast',
         icon: '🏉',
         duration: 3000,
         style: {
@@ -33,7 +34,7 @@ axiosInstance.interceptors.request.use(
           color: '#fff',
         },
       });
-    }, 8000); // 8 segundos
+    }, 5000); // 5 segundos
 
     pendingRequests.set(requestKey, timeoutId);
 
