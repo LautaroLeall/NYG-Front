@@ -58,9 +58,6 @@ const Sumate = () => {
           </h1>
           <p className="text-xl md:text-2xl text-nyg-gold font-light tracking-wide">
             Formá parte de la familia de Natación y Gimnasia.
-            <br />
-            Ya sea para jugar al rugby, hockey, o acompañarnos como sponsor, te
-            estamos esperando.
           </p>
         </motion.div>
       </div>
