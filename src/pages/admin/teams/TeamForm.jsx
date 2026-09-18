@@ -5,11 +5,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import axios from "../../../api/axiosConfig";
 import toast from "react-hot-toast";
-import { Save, Loader2, Camera, ChevronDown, ArrowLeft } from "lucide-react";
+import {
+  Save,
+  Loader2,
+  Camera,
+  ChevronDown,
+  ArrowLeft,
+  Shield,
+} from "lucide-react";
 
 const teamSchema = z.object({
-  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  shortName: z.string().min(1, "El nombre corto es obligatorio"),
+  name: z
+    .string()
+    .min(2, "El nombre debe tener al menos 2 caracteres")
+    .regex(
+      /^[a-zA-Z0-9\sñÑáéíóúÁÉÍÓÚ\-\.]+$/,
+      "El nombre contiene caracteres inválidos",
+    ),
+  shortName: z
+    .string()
+    .min(1, "El nombre corto es obligatorio")
+    .max(
+      5,
+      "El nombre corto no debe superar los 5 caracteres (Ej: NYG, LT, UNI)",
+    ),
   club: z.string().min(2, "El nombre del club es obligatorio"),
   category: z.string().min(1, "Debe seleccionar una categoría"),
   discipline: z.string().min(1, "Debe seleccionar una disciplina"),
@@ -151,10 +170,11 @@ const TeamForm = () => {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-3xl font-black text-nyg-blue uppercase tracking-tight">
+          <h1 className="text-2xl font-black text-nyg-blue uppercase tracking-widest flex items-center gap-3">
+            <Shield className="w-8 h-8" />
             {isEditing ? "Editar Equipo" : "Nuevo Equipo"}
           </h1>
-          <p className="text-gray-500 font-medium mt-1">
+          <p className="text-sm font-bold text-gray-400 tracking-wider">
             Completá los datos del plantel o club rival
           </p>
         </div>
