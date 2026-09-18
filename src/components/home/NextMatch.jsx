@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import axios from "../../api/axiosConfig";
 import dayjs from "dayjs";
 import "dayjs/locale/es";
+import { getShield } from "../../utils/shieldDictionary";
 dayjs.locale("es");
 
 const NextMatch = () => {
@@ -81,17 +82,11 @@ const NextMatch = () => {
               {/* Equipo Local */}
               <div className="flex flex-col items-center flex-1 text-center">
                 <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-50 rounded-full flex items-center justify-center shadow-lg border-4 border-white mb-4 overflow-hidden relative group-hover:scale-105 transition-transform">
-                  {match.homeTeam?.shieldUrl || match.homeTeam?.logo ? (
-                    <img
-                      src={match.homeTeam?.shieldUrl || match.homeTeam?.logo}
-                      alt={match.homeTeam?.name}
-                      className="w-full h-full object-contain p-4"
-                    />
-                  ) : (
-                    <span className="text-3xl font-black text-gray-300">
-                      {match.homeTeam?.name?.substring(0, 3).toUpperCase()}
-                    </span>
-                  )}
+                  <img
+                    src={getShield(match.homeTeam?.name, match.homeTeam?.shieldUrl || match.homeTeam?.logo)}
+                    alt={match.homeTeam?.name}
+                    className="w-full h-full object-contain p-4"
+                  />
                 </div>
                 <h3 className="text-xl md:text-2xl font-black text-gray-800 leading-tight">
                   {match.homeTeam?.name}
@@ -118,17 +113,11 @@ const NextMatch = () => {
               {/* Equipo Visitante */}
               <div className="flex flex-col items-center flex-1 text-center">
                 <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-50 rounded-full flex items-center justify-center shadow-lg border-4 border-white mb-4 overflow-hidden relative group-hover:scale-105 transition-transform">
-                  {match.awayTeam?.shieldUrl || match.awayTeam?.logo ? (
-                    <img
-                      src={match.awayTeam?.shieldUrl || match.awayTeam?.logo}
-                      alt={match.awayTeam?.name}
-                      className="w-full h-full object-contain p-4"
-                    />
-                  ) : (
-                    <span className="text-3xl font-black text-gray-300">
-                      {match.awayTeam?.name?.substring(0, 3).toUpperCase()}
-                    </span>
-                  )}
+                  <img
+                    src={getShield(match.awayTeam?.name, match.awayTeam?.shieldUrl || match.awayTeam?.logo)}
+                    alt={match.awayTeam?.name}
+                    className="w-full h-full object-contain p-4"
+                  />
                 </div>
                 <h3 className="text-xl md:text-2xl font-black text-gray-800 leading-tight">
                   {match.awayTeam?.name}
