@@ -351,6 +351,7 @@ const DetallePartido = () => {
 
                 {timelineEvents.map((event, index) => {
                   const isNYG = event.team === "NYG";
+                  const isLeftEvent = isHome ? isNYG : !isNYG;
                   return (
                     <motion.div
                       key={index}
@@ -358,7 +359,7 @@ const DetallePartido = () => {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1 }}
-                      className={`relative flex items-center ${isNYG ? "md:flex-row-reverse" : "md:flex-row"} w-full justify-start md:justify-between`}
+                      className={`relative flex items-center ${!isLeftEvent ? "md:flex-row-reverse" : "md:flex-row"} w-full justify-start md:justify-between`}
                     >
                       {/* Punto Central */}
                       <div
@@ -369,13 +370,13 @@ const DetallePartido = () => {
                       ></div>
 
                       <div
-                        className={`w-full md:w-[45%] pl-12 md:pl-0 ${isNYG ? "md:text-right md:pr-10" : "md:text-left md:pl-10"}`}
+                        className={`w-full md:w-[45%] pl-12 md:pl-0 ${isLeftEvent ? "md:text-right md:pr-10" : "md:text-left md:pl-10"}`}
                       >
                         <div
                           className={`p-4 rounded-2xl shadow-sm border ${isNYG ? "bg-blue-50/50 border-nyg-blue/10" : "bg-gray-50 border-gray-100"}`}
                         >
                           <div
-                            className={`flex items-center gap-2 mb-1 ${isNYG ? "md:justify-end" : "md:justify-start"}`}
+                            className={`flex items-center gap-2 mb-1 ${isLeftEvent ? "md:justify-end" : "md:justify-start"}`}
                           >
                             {event.minute && (
                               <span className="text-xs font-bold text-gray-400 mr-1">
