@@ -1,45 +1,21 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Link, useParams } from "react-router-dom";
-import {
-  ArrowLeft,
-  MapPin,
-  Calendar,
-  Clock,
-  Trophy,
-  Loader2,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
 import axios from "../../api/axiosConfig";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import dayjs from "dayjs";
 import "dayjs/locale/es";
 dayjs.locale("es");
 
 import { getShield } from "../../utils/shieldDictionary";
-
-const TACTICAL_POSITIONS = {
-  1: { top: "15%", left: "30%" },
-  2: { top: "15%", left: "50%" },
-  3: { top: "15%", left: "70%" },
-  4: { top: "27%", left: "40%" },
-  5: { top: "27%", left: "60%" },
-  6: { top: "39%", left: "20%" },
-  8: { top: "39%", left: "50%" },
-  7: { top: "39%", left: "80%" },
-  9: { top: "50%", left: "35%" },
-  10: { top: "60%", left: "50%" },
-  12: { top: "70%", left: "65%" },
-  13: { top: "80%", left: "80%" },
-  14: { top: "80%", left: "20%" },
-  11: { top: "80%", left: "90%" },
-  15: { top: "92%", left: "50%" },
-};
+import MatchHeader from "./components/MatchHeader";
+import MatchTimeline from "./components/MatchTimeline";
+import MatchSquadView from "./components/MatchSquadView";
 
 const DetallePartido = () => {
   const { id } = useParams();
   const [match, setMatch] = useState(null);
   const [stats, setStats] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [viewMode, setViewMode] = useState("lista"); // "lista" o "tactica"
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,7 +77,6 @@ const DetallePartido = () => {
   let timelineEvents = [];
 
   if (match.events && match.events.length > 0) {
-    // Usar eventos cargados manualmente desde el backend
     timelineEvents = match.events.map((e) => {
       let playerName = "Equipo";
       if (e.player && e.player.name) {
@@ -120,28 +95,25 @@ const DetallePartido = () => {
             : e.playerOut.name;
       }
 
+      let val = 0;
+      if (e.type === "Try") val = 5;
+      if (e.type === "Conversión") val = 2;
+      if (e.type === "Penal" || e.type === "Drop") val = 3;
+      if (e.type === "Try Penal") val = 7;
+
       return {
         team: e.team,
         type: e.type,
+        minute: e.minute,
         player: playerName,
         playerOut: playerOutName,
-        minute: e.minute,
-        isCard: e.type.includes("Tarjeta") || e.type === "Cambio",
-        val:
-          e.type === "Try"
-            ? 5
-            : e.type === "Conversión"
-              ? 2
-              : e.type === "Penal" || e.type === "Drop"
-                ? 3
-                : e.type === "Try Penal"
-                  ? 7
-                  : 0,
+        val,
+        isCard: e.type === "Tarjeta Amarilla" || e.type === "Tarjeta Roja",
       };
     });
-    // Ordenar por minuto ascendente
+
     timelineEvents.sort((a, b) => a.minute - b.minute);
-  } else {
+  } else if (stats.length > 0 || match.status === "Finalizado") {
     // LÓGICA SINTÉTICA (Fallback para partidos viejos o sin línea de tiempo manual)
     stats.forEach((s) => {
       let playerName = "Jugador";
@@ -257,376 +229,21 @@ const DetallePartido = () => {
           <ArrowLeft size={20} /> Volver al Fixture
         </Link>
 
-        {/* Header del Partido */}
-        <div className="bg-white rounded-3xl shadow-soft p-8 md:p-12 mb-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-nyg-blue/5 rounded-full blur-3xl -translate-y-20 translate-x-20"></div>
+        <MatchHeader
+          match={match}
+          homeTeam={homeTeam}
+          awayTeam={awayTeam}
+          venue={venue}
+        />
 
-          <div className="text-center mb-10 relative z-10">
-            <span className="inline-block px-4 py-1.5 bg-nyg-gold/10 text-nyg-gold font-black uppercase tracking-widest text-sm rounded-full mb-4">
-              {match.tournament?.name || "Amistoso"}
-            </span>
-            <div className="flex flex-wrap justify-center items-center gap-4 text-sm font-bold text-gray-500">
-              <span className="flex items-center gap-1">
-                <Calendar size={16} /> {dayjs(match.date).format("DD MMM YYYY")}
-              </span>
-              <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-              <span className="flex items-center gap-1">
-                <Clock size={16} /> {dayjs(match.date).format("HH:mm")} hs
-              </span>
-              <span className="w-1 h-1 bg-gray-300 rounded-full hidden sm:block"></span>
-              <span className="flex items-center gap-1 w-full sm:w-auto mt-2 sm:mt-0 justify-center">
-                <MapPin size={16} /> {venue}
-              </span>
-            </div>
-          </div>
+        <MatchTimeline
+          match={match}
+          timelineEvents={timelineEvents}
+          isHome={isHome}
+          rivalTeamName={rivalTeamName}
+        />
 
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4 relative z-10">
-            <div className="flex flex-col items-center gap-4 w-full md:w-1/3">
-              <img
-                src={getShield(
-                  match.homeTeam?.name,
-                  match.homeTeam?.shieldUrl || match.homeTeam?.logo,
-                )}
-                alt={match.homeTeam?.name}
-                title={match.homeTeam?.name}
-                className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-md hover:scale-110 transition-transform"
-              />
-              <h3 className="text-xl font-black text-nyg-blue text-center uppercase tracking-wide">
-                {homeTeam.name}
-              </h3>
-            </div>
-
-            <div className="flex flex-col items-center justify-center w-full md:w-1/3">
-              {match.status === "Finalizado" ? (
-                <div className="text-6xl md:text-7xl font-display font-black text-nyg-blue tracking-tighter flex items-center gap-4">
-                  <span>{homeTeam.score}</span>
-                  <span className="text-3xl text-gray-300 font-light">-</span>
-                  <span>{awayTeam.score}</span>
-                </div>
-              ) : (
-                <div className="text-3xl font-display font-black text-gray-400">
-                  VS
-                </div>
-              )}
-              <span className="mt-4 px-3 py-1 bg-gray-100 text-gray-500 font-bold text-xs uppercase tracking-widest rounded-md">
-                {match.status}
-              </span>
-            </div>
-
-            <div className="flex flex-col items-center gap-4 w-full md:w-1/3">
-              <img
-                src={getShield(
-                  match.awayTeam?.name,
-                  match.awayTeam?.shieldUrl || match.awayTeam?.logo,
-                )}
-                alt={match.awayTeam?.name}
-                title={match.awayTeam?.name}
-                className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-md hover:scale-110 transition-transform"
-              />
-              <h3 className="text-xl font-black text-gray-500 text-center uppercase tracking-wide">
-                {awayTeam.name}
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        {/* Línea de Tiempo (Resumen de Anotaciones) */}
-        {match.status === "Finalizado" && (
-          <div className="bg-white rounded-3xl shadow-soft p-8 md:p-12 mb-8">
-            <h3 className="text-2xl font-black text-nyg-blue uppercase tracking-wide mb-8 flex items-center gap-3">
-              <Trophy className="text-nyg-gold" size={28} />
-              Resumen del Partido
-            </h3>
-
-            {timelineEvents.length === 0 ? (
-              <p className="text-gray-400 text-center font-bold">
-                No hay eventos registrados para este partido.
-              </p>
-            ) : (
-              <div className="relative space-y-8 py-4">
-                {/* Línea vertical */}
-                <div className="absolute top-0 bottom-0 left-4 md:left-1/2 w-1 bg-gray-100 md:-translate-x-1/2"></div>
-
-                {timelineEvents.map((event, index) => {
-                  const isNYG = event.team === "NYG";
-                  const isLeftEvent = isHome ? isNYG : !isNYG;
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 }}
-                      className={`relative flex items-center ${!isLeftEvent ? "md:flex-row-reverse" : "md:flex-row"} w-full justify-start md:justify-between`}
-                    >
-                      {/* Punto Central */}
-                      <div
-                        className="absolute left-1 md:left-1/2 md:-translate-x-1/2 w-6 h-6 rounded-full border-4 border-white shadow-sm z-10"
-                        style={{
-                          backgroundColor: isNYG ? "#002A50" : "#9CA3AF",
-                        }}
-                      ></div>
-
-                      <div
-                        className={`w-full md:w-[45%] pl-12 md:pl-0 ${isLeftEvent ? "md:text-right md:pr-10" : "md:text-left md:pl-10"}`}
-                      >
-                        <div
-                          className={`p-4 rounded-2xl shadow-sm border ${isNYG ? "bg-blue-50/50 border-nyg-blue/10" : "bg-gray-50 border-gray-100"}`}
-                        >
-                          <div
-                            className={`flex items-center gap-2 mb-1 ${isLeftEvent ? "md:justify-end" : "md:justify-start"}`}
-                          >
-                            {event.minute && (
-                              <span className="text-xs font-bold text-gray-400 mr-1">
-                                {event.minute}'
-                              </span>
-                            )}
-                            <span
-                              className={`text-xs font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
-                                event.type === "Tarjeta Amarilla"
-                                  ? "bg-amber-100 text-amber-700"
-                                  : event.type === "Tarjeta Roja"
-                                    ? "bg-red-100 text-red-700"
-                                    : isNYG
-                                      ? "bg-nyg-blue text-white"
-                                      : "bg-gray-200 text-gray-600"
-                              }`}
-                            >
-                              {event.type} {event.val > 0 && `(+${event.val})`}
-                            </span>
-                          </div>
-                          {isNYG ? (
-                            event.type === "Cambio" ? (
-                              <div className="flex flex-col gap-0.5">
-                                <h4 className="font-bold text-gray-900 text-sm">
-                                  ↑ Entra: {event.player}
-                                </h4>
-                                {event.playerOut && (
-                                  <h4 className="font-bold text-gray-500 text-sm">
-                                    ↓ Sale: {event.playerOut}
-                                  </h4>
-                                )}
-                              </div>
-                            ) : (
-                              <h4 className="font-bold text-gray-900 text-lg">
-                                {event.player}
-                              </h4>
-                            )
-                          ) : (
-                            <h4 className="font-bold text-gray-600 text-lg">
-                              {event.type} Rival
-                            </h4>
-                          )}
-                          {!event.isCard && (
-                            <p className="text-sm font-medium text-gray-500 mt-1">
-                              {isNYG
-                                ? "Natación y Gimnasia"
-                                : rivalTeamName || "Rival"}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Nueva Sección: Formación (Plantel) */}
-        {match.roster && match.roster.length > 0 && (
-          <div className="bg-white rounded-3xl shadow-soft p-8 md:p-12">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
-              <h3 className="text-2xl font-black text-nyg-blue uppercase tracking-wide flex items-center gap-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-nyg-gold"
-                >
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                Formación NYG
-              </h3>
-
-              {/* Toggles */}
-              <div className="flex items-center bg-gray-100 p-1 rounded-xl">
-                <button
-                  onClick={() => setViewMode("lista")}
-                  className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-widest transition-all ${viewMode === "lista" ? "bg-white text-nyg-blue shadow-sm" : "text-gray-400 hover:text-gray-600"}`}
-                >
-                  Lista
-                </button>
-                <button
-                  onClick={() => setViewMode("tactica")}
-                  className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-widest transition-all ${viewMode === "tactica" ? "bg-white text-nyg-blue shadow-sm" : "text-gray-400 hover:text-gray-600"}`}
-                >
-                  Cancha
-                </button>
-              </div>
-            </div>
-
-            {viewMode === "lista" ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Titulares */}
-                <div>
-                  <h4 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-4 border-b border-gray-100 pb-2">
-                    Titulares
-                  </h4>
-                  <div className="space-y-3">
-                    {match.roster
-                      .filter((r) => r.isStarter)
-                      .sort(
-                        (a, b) => (a.shirtNumber || 99) - (b.shirtNumber || 99),
-                      )
-                      .map((r, i) => (
-                        <div key={i} className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-gray-100 overflow-hidden shrink-0">
-                            {r.player?.imageUrl ? (
-                              <img
-                                src={r.player.imageUrl}
-                                className="w-full h-full object-cover"
-                                alt=""
-                              />
-                            ) : null}
-                          </div>
-                          <div>
-                            <p className="font-bold text-gray-800 text-sm flex items-center gap-2">
-                              {r.shirtNumber && (
-                                <span className="text-[10px] bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded font-black">
-                                  {r.shirtNumber}
-                                </span>
-                              )}
-                              {r.player?.name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {r.player?.position}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    {match.roster.filter((r) => r.isStarter).length === 0 && (
-                      <p className="text-sm text-gray-400 italic">
-                        No asignados
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Suplentes */}
-                <div>
-                  <h4 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-4 border-b border-gray-100 pb-2">
-                    Suplentes
-                  </h4>
-                  <div className="space-y-3">
-                    {match.roster
-                      .filter((r) => !r.isStarter)
-                      .sort(
-                        (a, b) => (a.shirtNumber || 99) - (b.shirtNumber || 99),
-                      )
-                      .map((r, i) => (
-                        <div key={i} className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-gray-100 overflow-hidden shrink-0">
-                            {r.player?.imageUrl ? (
-                              <img
-                                src={r.player.imageUrl}
-                                className="w-full h-full object-cover"
-                                alt=""
-                              />
-                            ) : null}
-                          </div>
-                          <div>
-                            <p className="font-bold text-gray-800 text-sm flex items-center gap-2">
-                              {r.shirtNumber && (
-                                <span className="text-[10px] bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded font-black">
-                                  {r.shirtNumber}
-                                </span>
-                              )}
-                              {r.player?.name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {r.player?.position}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    {match.roster.filter((r) => !r.isStarter).length === 0 && (
-                      <p className="text-sm text-gray-400 italic">
-                        No asignados
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="relative w-full max-w-2xl mx-auto rounded-3xl overflow-hidden shadow-xl border-4 border-white bg-[#5f8742]">
-                <img
-                  src="/cancha-rugby.jpg"
-                  alt="Cancha de Rugby"
-                  className="w-full h-auto object-cover block"
-                />
-                <div className="absolute inset-0">
-                  {match.roster
-                    .filter(
-                      (r) =>
-                        r.isStarter &&
-                        r.shirtNumber &&
-                        TACTICAL_POSITIONS[r.shirtNumber],
-                    )
-                    .map((r, i) => {
-                      const pos = TACTICAL_POSITIONS[r.shirtNumber];
-                      const parts = r.player?.name?.split(" ") || ["Jugador"];
-                      const shortName =
-                        parts.length > 1
-                          ? `${parts[0].charAt(0)}. ${parts[parts.length - 1]}`
-                          : parts[0];
-
-                      return (
-                        <div
-                          key={i}
-                          className="absolute flex flex-col items-center justify-center -translate-x-1/2 -translate-y-1/2 hover:scale-110 transition-transform cursor-default"
-                          style={{ top: pos.top, left: pos.left }}
-                          title={r.player?.name}
-                        >
-                          <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-full border-2 border-nyg-blue shadow-lg overflow-hidden flex items-center justify-center relative">
-                            <Link
-                              to={`/rugby/jugador/${r.player?._id}`}
-                              className="block h-full"
-                            >
-                              {r.player?.imageUrl ? (
-                                <img
-                                  src={r.player.imageUrl}
-                                  className="w-full h-full object-cover"
-                                  alt=""
-                                />
-                              ) : (
-                                <span className="text-xs font-black text-nyg-blue">
-                                  {r.shirtNumber}
-                                </span>
-                              )}
-                            </Link>
-                          </div>
-                          <span className="mt-1 bg-black/70 backdrop-blur-sm text-white text-[9px] md:text-[11px] font-bold px-2 py-0.5 rounded shadow-sm whitespace-nowrap">
-                            {shortName}
-                          </span>
-                        </div>
-                      );
-                    })}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        <MatchSquadView match={match} />
       </div>
     </div>
   );

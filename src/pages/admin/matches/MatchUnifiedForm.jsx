@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import {
-  ArrowLeft,
-  Save,
-  Plus,
-  Trash2,
-  Loader2,
-  Users,
-  Clock,
-} from "lucide-react";
+import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import axios from "../../../api/axiosConfig";
 import toast from "react-hot-toast";
+
+import RosterManager from "./components/RosterManager";
+import TimelineEventsManager from "./components/TimelineEventsManager";
 
 const MatchUnifiedForm = () => {
   const { id } = useParams();
@@ -85,38 +80,6 @@ const MatchUnifiedForm = () => {
       }
       return updated;
     });
-  };
-
-  const handleAddEvent = () => {
-    setEvents([
-      ...events,
-      {
-        team: "NYG",
-        type: "Try",
-        minute: 1,
-        player: "",
-        playerOut: "",
-      },
-    ]);
-  };
-
-  const handleRemoveEvent = (index) => {
-    const newEvents = [...events];
-    newEvents.splice(index, 1);
-    setEvents(newEvents);
-  };
-
-  const handleEventChange = (index, field, value) => {
-    const newEvents = [...events];
-    if (field === "team" && value === "RIVAL") {
-      newEvents[index].player = null;
-      newEvents[index].playerOut = null;
-    }
-    if (field === "type" && value !== "Cambio") {
-      newEvents[index].playerOut = null;
-    }
-    newEvents[index][field] = value;
-    setEvents(newEvents);
   };
 
   const handleSubmit = async () => {
@@ -292,265 +255,39 @@ const MatchUnifiedForm = () => {
         </button>
       </div>
 
-      {/* SECCIÓN 1: PLANTEL */}
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="bg-gray-50 border-b border-gray-100 p-6 flex items-center gap-3">
-          <Users className="text-nyg-blue" size={24} />
-          <h2 className="text-lg font-black text-gray-800 uppercase tracking-wide">
-            1. Plantel del Partido
-          </h2>
-        </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {players.map((player) => (
-              <div
-                key={player._id}
-                className={`flex items-center justify-between p-3 rounded-xl border ${roster[player._id]?.isSelected ? "bg-blue-50/50 border-nyg-blue/20" : "bg-gray-50 border-gray-100 hover:border-gray-300"} transition-colors`}
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 shrink-0 overflow-hidden">
-                    {player.imageUrl ? (
-                      <img
-                        src={player.imageUrl}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : null}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-bold text-gray-800 text-sm truncate">
-                      {player.name}
-                    </p>
-                    <p className="text-xs text-gray-500 font-medium">
-                      {player.position}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <label className="flex flex-col items-center gap-1 cursor-pointer">
-                    <span className="text-[10px] font-black uppercase text-gray-400">
-                      Conv
-                    </span>
-                    <input
-                      type="checkbox"
-                      checked={roster[player._id]?.isSelected}
-                      onChange={(e) =>
-                        handleRosterChange(
-                          player._id,
-                          "isSelected",
-                          e.target.checked,
-                        )
-                      }
-                      className="w-4 h-4 text-nyg-blue rounded"
-                    />
-                  </label>
-                  <label className="flex flex-col items-center gap-1 cursor-pointer">
-                    <span className="text-[10px] font-black uppercase text-gray-400">
-                      Titular
-                    </span>
-                    <input
-                      type="checkbox"
-                      checked={roster[player._id]?.isStarter}
-                      onChange={(e) =>
-                        handleRosterChange(
-                          player._id,
-                          "isStarter",
-                          e.target.checked,
-                        )
-                      }
-                      className="w-4 h-4 text-nyg-gold rounded"
-                    />
-                  </label>
-                  {roster[player._id]?.isSelected && (
-                    <div className="flex flex-col items-center gap-1 ml-2 pl-2 border-l border-gray-100">
-                      <span className="text-[10px] font-black uppercase text-gray-400">
-                        Camiseta
-                      </span>
-                      <input
-                        type="number"
-                        min="1"
-                        max="99"
-                        value={roster[player._id]?.shirtNumber}
-                        onChange={(e) =>
-                          handleRosterChange(
-                            player._id,
-                            "shirtNumber",
-                            e.target.value,
-                          )
-                        }
-                        className="w-12 p-1 border border-gray-300 rounded-md text-center font-bold text-sm focus:ring-2 focus:ring-nyg-blue focus:outline-none bg-white"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <RosterManager
+        players={players}
+        roster={roster}
+        handleRosterChange={handleRosterChange}
+      />
 
-      {/* SECCIÓN 2: LÍNEA DE TIEMPO */}
-      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="bg-gray-50 border-b border-gray-100 p-6 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <Clock className="text-nyg-blue" size={24} />
-            <h2 className="text-lg font-black text-gray-800 uppercase tracking-wide">
-              2. Línea de Tiempo
-            </h2>
-          </div>
-          <button
-            onClick={handleAddEvent}
-            className="flex items-center gap-2 px-4 py-2 bg-nyg-red/10 text-nyg-red rounded-lg font-bold hover:bg-nyg-red hover:text-white transition-colors text-sm"
-          >
-            <Plus size={16} /> Agregar Evento
-          </button>
-        </div>
+      <TimelineEventsManager
+        events={events}
+        setEvents={setEvents}
+        players={players}
+        roster={roster}
+      />
 
-        <div className="p-6">
-          {events.length === 0 ? (
-            <div className="text-center py-12 text-gray-400 font-bold border-2 border-dashed border-gray-100 rounded-2xl">
-              No hay eventos cargados en este partido.
-            </div>
+      {/* FOOTER ACCIONES */}
+      <div className="flex items-center justify-end gap-4 mt-8 pb-12">
+        <button
+          onClick={() => navigate("/admin/partidos")}
+          className="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-full hover:bg-gray-200 transition-colors"
+        >
+          Cancelar
+        </button>
+        <button
+          onClick={handleSubmit}
+          disabled={isSaving}
+          className="px-8 py-3 bg-nyg-blue text-white font-bold rounded-full hover:bg-blue-900 transition-colors flex items-center gap-2 shadow-lg disabled:opacity-70"
+        >
+          {isSaving ? (
+            <Loader2 className="animate-spin" size={20} />
           ) : (
-            <div className="space-y-4">
-              {events.map((event, idx) => {
-                const isCambio =
-                  event.type === "Cambio" && event.team === "NYG";
-                return (
-                  <div
-                    key={idx}
-                    className="flex flex-col md:flex-row items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200"
-                  >
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="font-bold text-gray-400 uppercase text-[10px] w-8">
-                        Minuto
-                      </span>
-                      <input
-                        type="number"
-                        min="0"
-                        max="120"
-                        value={event.minute}
-                        onChange={(e) =>
-                          handleEventChange(
-                            idx,
-                            "minute",
-                            Number(e.target.value),
-                          )
-                        }
-                        className="w-16 p-2 border border-gray-300 rounded-lg text-center font-bold focus:ring-nyg-blue"
-                      />
-                    </div>
-
-                    <div className="w-full md:w-40 shrink-0">
-                      <select
-                        value={event.team}
-                        onChange={(e) =>
-                          handleEventChange(idx, "team", e.target.value)
-                        }
-                        className="w-full p-2 border border-gray-300 rounded-lg font-bold"
-                      >
-                        <option value="NYG">Natación (Local)</option>
-                        <option value="RIVAL">Equipo Rival</option>
-                      </select>
-                    </div>
-
-                    <div className="w-full md:w-40 shrink-0">
-                      <select
-                        value={event.type}
-                        onChange={(e) =>
-                          handleEventChange(idx, "type", e.target.value)
-                        }
-                        className="w-full p-2 border border-gray-300 rounded-lg font-bold"
-                      >
-                        <option value="Try">Try</option>
-                        <option value="Conversión">Conversión</option>
-                        <option value="Penal">Penal</option>
-                        <option value="Drop">Drop</option>
-                        <option value="Try Penal">Try Penal</option>
-                        <option value="Tarjeta Amarilla">
-                          Tarjeta Amarilla
-                        </option>
-                        <option value="Tarjeta Roja">Tarjeta Roja</option>
-                        <option value="Cambio">Cambio</option>
-                      </select>
-                    </div>
-
-                    <div className="w-full flex-1 flex flex-col sm:flex-row gap-2">
-                      {event.team === "NYG" ? (
-                        <>
-                          <div className="flex-1 relative">
-                            {isCambio && (
-                              <span className="absolute -top-2 left-2 bg-gray-50 text-[10px] font-black text-gray-500 px-1">
-                                ENTRA
-                              </span>
-                            )}
-                            <select
-                              value={
-                                typeof event.player === "object"
-                                  ? event.player?._id
-                                  : event.player || ""
-                              }
-                              onChange={(e) =>
-                                handleEventChange(idx, "player", e.target.value)
-                              }
-                              className="w-full p-2 border border-gray-300 rounded-lg font-medium"
-                            >
-                              <option value="">Seleccionar Jugador...</option>
-                              {selectedPlayers.map((p) => (
-                                <option key={p._id} value={p._id}>
-                                  {p.name}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                          {isCambio && (
-                            <div className="flex-1 relative">
-                              <span className="absolute -top-2 left-2 bg-gray-50 text-[10px] font-black text-gray-500 px-1">
-                                SALE
-                              </span>
-                              <select
-                                value={
-                                  typeof event.playerOut === "object"
-                                    ? event.playerOut?._id
-                                    : event.playerOut || ""
-                                }
-                                onChange={(e) =>
-                                  handleEventChange(
-                                    idx,
-                                    "playerOut",
-                                    e.target.value,
-                                  )
-                                }
-                                className="w-full p-2 border border-gray-300 rounded-lg font-medium text-gray-500"
-                              >
-                                <option value="">Seleccionar Jugador...</option>
-                                {selectedPlayers.map((p) => (
-                                  <option key={p._id} value={p._id}>
-                                    {p.name}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        <div className="w-full p-2 bg-gray-200 rounded-lg font-medium text-gray-400 text-center cursor-not-allowed text-sm">
-                          {event.type} del Rival
-                        </div>
-                      )}
-                    </div>
-
-                    <button
-                      onClick={() => handleRemoveEvent(idx)}
-                      className="p-2 text-gray-400 hover:text-nyg-red transition-colors shrink-0"
-                    >
-                      <Trash2 size={20} />
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
+            <Save size={20} />
           )}
-        </div>
+          {isSaving ? "Guardando..." : "Guardar Ficha Técnica"}
+        </button>
       </div>
     </div>
   );
