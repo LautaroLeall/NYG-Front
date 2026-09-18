@@ -258,11 +258,11 @@ const MatchList = () => {
                         Editar Rdo
                       </Link>
                       <Link
-                        to={`/admin/partidos/estadisticas/${match._id}`}
-                        className="px-4 py-2 bg-nyg-gold text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-yellow-600 transition-colors whitespace-nowrap"
-                        title="Planilla de Estadísticas"
+                        to={`/admin/partidos/ficha/${match._id}`}
+                        className="px-4 py-2 bg-nyg-blue text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors whitespace-nowrap"
+                        title="Ficha Técnica y Línea de Tiempo"
                       >
-                        Stats
+                        Ficha Técnica
                       </Link>
                     </div>
                   )}
