@@ -60,6 +60,8 @@ const MatchList = () => {
   };
 
   const filteredMatches = matches.filter((match) => {
+    if (match.matchType === "Generico") return false;
+
     const matchSearch =
       match.homeTeam?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       match.awayTeam?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -108,10 +110,10 @@ const MatchList = () => {
         <div>
           <h1 className="text-2xl font-black text-nyg-blue uppercase tracking-widest flex items-center gap-3">
             <Calendar className="w-8 h-8" />
-            Partidos
+            Partidos NYG
           </h1>
           <p className="text-sm font-bold text-gray-400 tracking-wider">
-            Gestión del fixture y carga de resultados
+            Gestión del fixture y carga de resultados del club
           </p>
         </div>
         <Link
@@ -243,27 +245,30 @@ const MatchList = () => {
                 <div className="flex items-center justify-end gap-2 lg:w-64 shrink-0">
                   {match.status === "Programado" ? (
                     <Link
-                      to={`/admin/partidos/resultado/${match._id}`}
+                      to={match.matchType === "Generico" ? `/admin/partidos/resultado/${match._id}` : `/admin/partidos/ficha/${match._id}`}
                       className="px-4 py-2 bg-nyg-blue text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors whitespace-nowrap"
                     >
-                      Cargar Resultado
+                      {match.matchType === "Generico" ? "Cargar Rdo" : "Armar Ficha"}
                     </Link>
                   ) : (
                     <div className="flex gap-2">
-                      <Link
-                        to={`/admin/partidos/resultado/${match._id}`}
-                        className="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors whitespace-nowrap"
-                        title="Editar Resultado"
-                      >
-                        Editar Rdo
-                      </Link>
-                      <Link
-                        to={`/admin/partidos/ficha/${match._id}`}
-                        className="px-4 py-2 bg-nyg-blue text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors whitespace-nowrap"
-                        title="Ficha Técnica y Línea de Tiempo"
-                      >
-                        Ficha Técnica
-                      </Link>
+                      {match.matchType === "Generico" ? (
+                        <Link
+                          to={`/admin/partidos/resultado/${match._id}`}
+                          className="px-4 py-2 bg-nyg-blue text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors whitespace-nowrap"
+                          title="Editar Resultado Rápido"
+                        >
+                          Editar Rdo
+                        </Link>
+                      ) : (
+                        <Link
+                          to={`/admin/partidos/ficha/${match._id}`}
+                          className="px-4 py-2 bg-nyg-blue text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors whitespace-nowrap"
+                          title="Ficha Técnica y Línea de Tiempo"
+                        >
+                          Ficha Técnica
+                        </Link>
+                      )}
                     </div>
                   )}
 
