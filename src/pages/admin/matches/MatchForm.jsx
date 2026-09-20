@@ -61,8 +61,12 @@ const MatchForm = () => {
   );
 
   const filteredTeams = selectedTournament
-    ? teams.filter((t) => t.category === selectedTournament.category)
-    : teams;
+    ? teams.filter((t) => {
+        // Asumimos que participants es un array de IDs o de objetos con _id
+        const participants = selectedTournament.participants || [];
+        return participants.some(p => p === t._id || p._id === t._id);
+      })
+    : [];
 
   useEffect(() => {
     fetchData();
@@ -103,8 +107,14 @@ const MatchForm = () => {
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
+      
+      const home = teams.find(t => t._id === data.homeTeam);
+      const away = teams.find(t => t._id === data.awayTeam);
+      const isNygMatch = home?.isOwnTeam || away?.isOwnTeam;
+
       const payload = {
         ...data,
+        matchType: isNygMatch ? "NYG" : "Generico",
       };
 
       if (isEditing) {
@@ -114,7 +124,7 @@ const MatchForm = () => {
         await axios.post("/api/matches", payload);
         toast.success("Partido programado con éxito");
       }
-      navigate("/admin/partidos");
+      navigate(payload.matchType === "Generico" ? "/admin/partidos-torneo" : "/admin/partidos");
     } catch (error) {
       console.error(error);
       toast.error(
