@@ -42,6 +42,7 @@ import TournamentForm from "../pages/admin/tournaments/TournamentForm";
 
 // Admin - Partidos
 import MatchList from "../pages/admin/matches/MatchList";
+import GenericMatchList from "../pages/admin/matches/GenericMatchList";
 import MatchForm from "../pages/admin/matches/MatchForm";
 import MatchResultForm from "../pages/admin/matches/MatchResultForm";
 import MatchUnifiedForm from "../pages/admin/matches/MatchUnifiedForm";
@@ -79,6 +80,7 @@ const AppRouter = () => {
 
             {/* Rutas ABM Partidos */}
             <Route path="partidos" element={<MatchList />} />
+            <Route path="partidos-torneo" element={<GenericMatchList />} />
             <Route path="partidos/nuevo" element={<MatchForm />} />
             <Route path="partidos/editar/:id" element={<MatchForm />} />
             <Route
