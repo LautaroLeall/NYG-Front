@@ -116,7 +116,7 @@ const MatchResultForm = () => {
       setValue("awayPenaltyTries", data.awayPenaltyTries || 0);
     } catch (error) {
       toast.error("Error al cargar el partido");
-      navigate("/admin/partidos");
+      navigate("/admin/partidos-torneo");
     }
   };
 
@@ -125,7 +125,7 @@ const MatchResultForm = () => {
       setIsLoading(true);
       await axios.put(`/api/matches/${id}`, data);
       toast.success("Resultado guardado con éxito");
-      navigate("/admin/partidos");
+      navigate("/admin/partidos-torneo");
     } catch (error) {
       console.error(error);
       toast.error(
@@ -151,7 +151,7 @@ const MatchResultForm = () => {
           </p>
         </div>
         <Link
-          to="/admin/partidos"
+          to="/admin/partidos-torneo"
           className="flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full font-black uppercase tracking-widest text-sm transition-all"
         >
           <ArrowLeft size={18} />
