@@ -26,7 +26,8 @@ const AdminLayout = () => {
   const navItems = [
     { name: "Dashboard", path: "/admin", icon: <LayoutDashboard size={20} /> },
     { name: "Torneos", path: "/admin/torneos", icon: <Trophy size={20} /> },
-    { name: "Partidos", path: "/admin/partidos", icon: <Calendar size={20} /> },
+    { name: "Partidos NYG", path: "/admin/partidos", icon: <Calendar size={20} /> },
+    { name: "Res. Torneos", path: "/admin/partidos-torneo", icon: <Trophy size={20} /> },
     { name: "Equipos", path: "/admin/equipos", icon: <Shield size={20} /> },
     { name: "Planteles", path: "/admin/planteles", icon: <Users size={20} /> },
     {
