@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import axios from "../../../api/axiosConfig";
 import toast from "react-hot-toast";
-import { Loader2, Save, ChevronDown, Trophy } from "lucide-react";
+import { Loader2, Save, ChevronDown, Trophy, Search } from "lucide-react";
 
 const tournamentSchema = z.object({
   name: z
@@ -25,6 +25,7 @@ const tournamentSchema = z.object({
   tiebreakRule: z.string().min(1, "Debe seleccionar las reglas de desempate"),
   isArchived: z.boolean(),
   isFeatured: z.boolean(),
+  participants: z.array(z.string()).optional(),
 });
 
 const CATEGORIAS = [
@@ -49,6 +50,8 @@ const TournamentForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [pointsRules, setPointsRules] = useState([]);
   const [tiebreakRules, setTiebreakRules] = useState([]);
+  const [teamsList, setTeamsList] = useState([]);
+  const [teamSearch, setTeamSearch] = useState("");
 
   const {
     register,
@@ -68,10 +71,13 @@ const TournamentForm = () => {
       tiebreakRule: "",
       isArchived: false,
       isFeatured: false,
+      participants: [],
     },
   });
 
   const watchIsArchived = watch("isArchived");
+  const watchParticipants = watch("participants");
+  const watchCategory = watch("category");
 
   useEffect(() => {
     fetchRules();
@@ -82,12 +88,14 @@ const TournamentForm = () => {
 
   const fetchRules = async () => {
     try {
-      const [pointsRes, tiebreakRes] = await Promise.all([
+      const [pointsRes, tiebreakRes, teamsRes] = await Promise.all([
         axios.get("/api/tournaments/rules/points"),
         axios.get("/api/tournaments/rules/tiebreak"),
+        axios.get("/api/teams"),
       ]);
       setPointsRules(pointsRes.data);
       setTiebreakRules(tiebreakRes.data);
+      setTeamsList(teamsRes.data);
     } catch (error) {
       toast.error("Error al cargar las reglas oficiales");
     }
@@ -106,6 +114,7 @@ const TournamentForm = () => {
       setValue("tiebreakRule", data.tiebreakRule?._id || data.tiebreakRule);
       setValue("isArchived", data.isArchived);
       setValue("isFeatured", data.isFeatured || false);
+      setValue("participants", data.participants?.map((p) => p._id || p) || []);
     } catch (error) {
       toast.error("Error al cargar el torneo");
       navigate("/admin/torneos");
@@ -373,6 +382,75 @@ const TournamentForm = () => {
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-nyg-blue"></div>
               </label>
             </div>
+          </div>
+        </div>
+
+        <div className="bg-white border border-gray-100 shadow-sm rounded-3xl p-6 md:p-8 mt-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 pb-4 mb-6 gap-4">
+            <div>
+              <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest">
+                Equipos Participantes ({watchParticipants.length})
+              </h3>
+              <p className="text-xs text-gray-500 mt-1">
+                Mostrando categoría: {watchCategory || "Todas"}
+              </p>
+            </div>
+            
+            {/* Buscador en tiempo real */}
+            <div className="relative w-full sm:w-64">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Buscar club..."
+                value={teamSearch}
+                onChange={(e) => setTeamSearch(e.target.value)}
+                className="block w-full pl-10 pr-4 py-2 border-2 border-gray-100 rounded-full bg-gray-50 text-sm focus:bg-white focus:border-nyg-blue focus:outline-none transition-colors"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-96 overflow-y-auto pr-2">
+            {teamsList
+              .filter((team) => {
+                const matchesCategory = !watchCategory || team.category === watchCategory;
+                const matchesSearch = team.name.toLowerCase().includes(teamSearch.toLowerCase()) || 
+                                      (team.shortName && team.shortName.toLowerCase().includes(teamSearch.toLowerCase()));
+                return matchesCategory && matchesSearch;
+              })
+              .map((team) => {
+                const isSelected = watchParticipants.includes(team._id);
+                return (
+                  <label
+                    key={team._id}
+                    className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                      isSelected
+                        ? "border-nyg-blue bg-blue-50/30"
+                        : "border-gray-100 bg-white hover:border-gray-200"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      value={team._id}
+                      {...register("participants")}
+                      className="w-5 h-5 rounded text-nyg-blue focus:ring-nyg-blue"
+                    />
+                    <span className="font-bold text-gray-800 text-sm truncate">
+                      {team.name}
+                    </span>
+                  </label>
+                );
+              })}
+            {teamsList.filter((team) => {
+                const matchesCategory = !watchCategory || team.category === watchCategory;
+                const matchesSearch = team.name.toLowerCase().includes(teamSearch.toLowerCase());
+                return matchesCategory && matchesSearch;
+              }).length === 0 && (
+              <p className="text-gray-400 text-sm font-bold col-span-3 text-center py-8">
+                No se encontraron equipos con esos filtros.
+              </p>
+            )}
           </div>
         </div>
 
