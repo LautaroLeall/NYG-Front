@@ -27,7 +27,27 @@ const StandingsPreview = () => {
             `/api/standings/${activeTournament._id}`,
           );
           if (standRes.data && standRes.data.data) {
-            setStandings(standRes.data.data.slice(0, 5)); // Mostrar solo el Top 5
+            const allStandings = standRes.data.data;
+            const top4 = allStandings.slice(0, 4);
+            
+            const isNatacionInTop4 = top4.some(team => team.teamName.toLowerCase().includes("nataci"));
+            
+            let finalStandings = [...top4];
+            
+            if (allStandings.length > 4) {
+              if (isNatacionInTop4) {
+                finalStandings.push(allStandings[4]);
+              } else {
+                const natacionTeam = allStandings.find(team => team.teamName.toLowerCase().includes("nataci"));
+                if (natacionTeam) {
+                  finalStandings.push(natacionTeam);
+                } else {
+                  finalStandings.push(allStandings[4]);
+                }
+              }
+            }
+            
+            setStandings(finalStandings);
           }
         } else {
           // Fallback por si no hay ninguno marcado como destacado
@@ -103,23 +123,21 @@ const StandingsPreview = () => {
                     ) : (
                       standings.map((team, index) => {
                         const isNYG =
-                          team.teamName.includes("Natación") ||
-                          team.teamName.includes("Gimnasia");
+                          team.teamName.toLowerCase().includes("nataci");
 
                         return (
                           <tr
                             key={team.teamId}
-                            className={`transition-colors hover:bg-gray-50 ${isNYG ? "bg-nyg-blue/5" : ""}`}
+                            className={`transition-colors hover:bg-gray-50 border-l-4 ${team.pos <= 4 ? "border-l-nyg-gold" : "border-l-transparent"} ${isNYG ? "bg-nyg-blue/5" : ""}`}
                           >
                             <td className="p-4 md:p-6">
                               <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center font-black mx-auto ${
-                                  index === 0
-                                    ? "bg-nyg-gold text-white"
-                                    : index < 4
-                                      ? "bg-gray-800 text-white"
-                                      : "bg-gray-100 text-gray-500"
-                                }`}
+                                className={`w-8 h-8 rounded-full flex items-center justify-center font-black mx-auto ${team.pos === 1
+                                    ? "bg-nyg-gold text-white shadow-md"
+                                    : team.pos <= 4
+                                      ? "bg-nyg-blue text-white shadow-sm"
+                                      : "bg-gray-100 text-gray-400"
+                                  }`}
                               >
                                 {team.pos}
                               </div>
