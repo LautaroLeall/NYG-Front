@@ -31,10 +31,10 @@ const newsSchema = z.object({
       50,
       "El contenido de la noticia debe tener al menos 50 caracteres (redacta algo más extenso).",
     ),
-  category: z.enum(["Institucional", "Rugby", "Hockey", "Infantiles", "Club"], {
+  category: z.enum(["Institucional", "Rugby"], {
     errorMap: () => ({ message: "Selecciona una categoría válida" }),
   }),
-  discipline: z.enum(["Rugby", "Hockey", ""]).optional().nullable(),
+  discipline: z.enum(["Rugby", ""]).optional().nullable(),
   author: z.string().min(2, "El nombre del autor es obligatorio"),
   isPublished: z.boolean(),
   isFeatured: z.boolean(),
@@ -48,8 +48,8 @@ const newsSchema = z.object({
   ),
 });
 
-const CATEGORIES = ["Institucional", "Rugby", "Hockey", "Infantiles", "Club"];
-const DISCIPLINES = ["Rugby", "Hockey"];
+const CATEGORIES = ["Institucional", "Rugby"];
+const DISCIPLINES = ["Rugby"];
 
 const NewsForm = () => {
   const { id } = useParams();
@@ -216,9 +216,8 @@ const NewsForm = () => {
               <input
                 type="text"
                 {...register("title")}
-                className={`w-full px-4 py-3 rounded-xl border ${
-                  errors.title ? "border-red-300 bg-red-50" : "border-gray-200"
-                } focus:ring-2 focus:ring-nyg-blue focus:border-transparent transition-all outline-hidden`}
+                className={`w-full px-4 py-3 rounded-xl border ${errors.title ? "border-red-300 bg-red-50" : "border-gray-200"
+                  } focus:ring-2 focus:ring-nyg-blue focus:border-transparent transition-all outline-hidden`}
                 placeholder="Ej: NYG se consagra campeón..."
               />
               {errors.title && (
@@ -236,11 +235,10 @@ const NewsForm = () => {
               <textarea
                 {...register("subtitle")}
                 rows="2"
-                className={`w-full px-4 py-3 rounded-xl border ${
-                  errors.subtitle
-                    ? "border-red-300 bg-red-50"
-                    : "border-gray-200"
-                } focus:ring-2 focus:ring-nyg-blue focus:border-transparent transition-all outline-hidden resize-none`}
+                className={`w-full px-4 py-3 rounded-xl border ${errors.subtitle
+                  ? "border-red-300 bg-red-50"
+                  : "border-gray-200"
+                  } focus:ring-2 focus:ring-nyg-blue focus:border-transparent transition-all outline-hidden resize-none`}
                 placeholder="Breve resumen para atraer al lector..."
               />
               {errors.subtitle && (
@@ -258,11 +256,10 @@ const NewsForm = () => {
               <textarea
                 {...register("content")}
                 rows="15"
-                className={`w-full px-4 py-3 rounded-xl border ${
-                  errors.content
-                    ? "border-red-300 bg-red-50"
-                    : "border-gray-200"
-                } focus:ring-2 focus:ring-nyg-blue focus:border-transparent transition-all outline-hidden resize-y`}
+                className={`w-full px-4 py-3 rounded-xl border ${errors.content
+                  ? "border-red-300 bg-red-50"
+                  : "border-gray-200"
+                  } focus:ring-2 focus:ring-nyg-blue focus:border-transparent transition-all outline-hidden resize-y`}
                 placeholder="Escribe el artículo aquí... (Puedes usar separaciones de párrafos)"
               />
               {errors.content && (
@@ -342,17 +339,16 @@ const NewsForm = () => {
                 <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-2">
                   Disciplina Relacionada
                 </label>
-                <select
-                  {...register("discipline")}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-nyg-blue focus:border-transparent bg-white outline-hidden"
-                >
-                  <option value="">General (Ambas / Ninguna)</option>
-                  {DISCIPLINES.map((d) => (
-                    <option key={d} value={d}>
-                      {d}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <input
+                    type="text"
+                    readOnly
+                    value="Rugby"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 font-bold cursor-not-allowed select-none"
+                    title="Actualmente solo disponible para Rugby"
+                  />
+                  <input type="hidden" {...register("discipline")} value="Rugby" />
+                </div>
               </div>
 
               <div>
@@ -373,9 +369,8 @@ const NewsForm = () => {
                 <input
                   type="date"
                   {...register("publishDate")}
-                  className={`w-full px-4 py-3 rounded-xl border ${
-                    errors.publishDate ? "border-red-300" : "border-gray-200"
-                  } focus:ring-2 focus:ring-nyg-blue outline-hidden`}
+                  className={`w-full px-4 py-3 rounded-xl border ${errors.publishDate ? "border-red-300" : "border-gray-200"
+                    } focus:ring-2 focus:ring-nyg-blue outline-hidden`}
                 />
                 {errors.publishDate && (
                   <p className="mt-1 text-xs text-red-500">
