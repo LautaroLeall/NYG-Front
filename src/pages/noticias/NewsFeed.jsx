@@ -24,9 +24,8 @@ const NewsFeed = () => {
   const fetchNews = async (pageNumber, reset = false) => {
     try {
       setIsLoading(true);
-      const url = `/api/news?page=${pageNumber}&limit=10${
-        activeCategory !== "Todas" ? `&category=${activeCategory}` : ""
-      }`;
+      const url = `/api/news?page=${pageNumber}&limit=10${activeCategory !== "Todas" ? `&category=${activeCategory}` : ""
+        }`;
       const res = await axios.get(url);
       const newItems = res.data.data;
 
@@ -58,7 +57,7 @@ const NewsFeed = () => {
     : [];
 
   return (
-    <div className="w-full bg-gray-50 pb-32 min-h-screen">
+    <div className="w-full bg-gray-50 min-h-screen">
       {/* Cabecera */}
       <div
         className="relative h-[55vh] min-h-87.5 flex items-center justify-center bg-center bg-cover"
@@ -82,7 +81,7 @@ const NewsFeed = () => {
         </motion.div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-25 -mt-5 relative z-20">
         {/* Filtros Llamativos (Tipográficos y Elegantes) */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -94,11 +93,10 @@ const NewsFeed = () => {
               <button
                 key={idx}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-5 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 ${
-                  activeCategory === cat
+                className={`px-5 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 ${activeCategory === cat
                     ? "bg-nyg-blue text-white shadow-md"
                     : "bg-transparent text-gray-400 hover:text-nyg-blue hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 {cat}
               </button>
@@ -252,21 +250,23 @@ const NewsFeed = () => {
         )}
 
         {/* Cargar más o Loader */}
-        <div className="mt-20 mb-5 text-center border-t border-gray-100 pt-16">
-          {isLoading && news.length > 0 && (
-            <div className="flex justify-center mb-6">
-              <Loader2 className="w-10 h-10 text-nyg-red animate-spin" />
-            </div>
-          )}
-          {hasMore && !isLoading && (
-            <button
-              onClick={loadMore}
-              className="group relative inline-flex items-center justify-center px-12 py-4 font-black uppercase tracking-widest text-white transition-all bg-nyg-blue rounded-full hover:bg-gray-900 active:scale-95"
-            >
-              Cargar más noticias
-            </button>
-          )}
-        </div>
+        {(hasMore || (isLoading && news.length > 0)) && (
+          <div className="mt-20 mb-5 text-center border-t border-gray-100 pt-16">
+            {isLoading && news.length > 0 && (
+              <div className="flex justify-center mb-6">
+                <Loader2 className="w-10 h-10 text-nyg-red animate-spin" />
+              </div>
+            )}
+            {hasMore && !isLoading && (
+              <button
+                onClick={loadMore}
+                className="group relative inline-flex items-center justify-center px-12 py-4 font-black uppercase tracking-widest text-white transition-all bg-nyg-blue rounded-full hover:bg-gray-900 active:scale-95"
+              >
+                Cargar más noticias
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Sponsors */}

@@ -38,6 +38,23 @@ const NewsArticle = () => {
     );
   }
 
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: article.title,
+          text: article.subtitle || "Mirá esta noticia del Club Natación y Gimnasia",
+          url: window.location.href,
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Enlace copiado al portapapeles. ¡Listo para pegar y compartir!");
+      }
+    } catch (error) {
+      console.log("Error al compartir:", error);
+    }
+  };
+
   if (!article) return null;
 
   return (
@@ -76,6 +93,7 @@ const NewsArticle = () => {
               {dayjs(article.publishDate).format("DD MMM YYYY")}
             </span>
           </div>
+
           <h1 className="text-4xl md:text-6xl font-black text-white leading-tight drop-shadow-lg mb-4">
             {article.title}
           </h1>
@@ -87,20 +105,23 @@ const NewsArticle = () => {
         </motion.div>
       </div>
 
+      {/* Botón Compartir Mobile (Fixed Flotante) */}
+      <button
+        onClick={handleShare}
+        className="md:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-nyg-blue text-white rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(0,51,160,0.4)] border border-blue-400 hover:scale-110 active:scale-95 transition-transform"
+        aria-label="Compartir"
+      >
+        <Share2 size={24} />
+      </button>
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 relative z-20 flex flex-col md:flex-row gap-12">
         {/* Sidebar Social (Desktop) */}
         <div className="hidden md:flex flex-col gap-4 w-16 shrink-0 pt-4">
           <div className="sticky top-32 flex flex-col gap-4">
             <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: article.title,
-                    url: window.location.href,
-                  });
-                }
-              }}
-              className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-nyg-blue hover:text-white transition-colors"
+              onClick={handleShare}
+              title="Compartir nota"
+              className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-nyg-blue hover:text-white transition-colors shadow-sm hover:shadow-md"
             >
               <Share2 size={20} />
             </button>
