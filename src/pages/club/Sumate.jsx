@@ -38,7 +38,7 @@ const Sumate = () => {
   };
 
   return (
-    <div className="min-h-screen bg-nyg-white overflow-hidden pb-16">
+    <div className="min-h-screen bg-nyg-white overflow-hidden">
       {/* Hero Section */}
       <div
         className="relative h-[55vh] min-h-87.5 flex items-center justify-center bg-center bg-cover"
@@ -62,7 +62,7 @@ const Sumate = () => {
         </motion.div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 mb-15 -mt-16 relative z-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-25 mt-16">
         <div className="grid lg:grid-cols-5 gap-8">
           {/* Columna Izquierda: Información / Beneficios */}
           <div className="lg:col-span-2 space-y-6">
