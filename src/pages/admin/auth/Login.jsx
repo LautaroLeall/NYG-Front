@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShieldCheck, Mail, Lock, AlertCircle, Loader2 } from "lucide-react";
 import { useAuthStore } from "../../../store/authStore";
-import axios from "axios";
+import axiosInstance from "../../../api/axiosConfig";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Debe ser un email válido" }),
@@ -35,15 +35,12 @@ const Login = () => {
 
     try {
       // Conexión real con el backend
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+      const res = await axiosInstance.post(
+        "/api/auth/login",
         {
           email: data.email,
           password: data.password,
-        },
-        {
-          withCredentials: true, // Importante para recibir la cookie del refresh token
-        },
+        }
       );
 
       // El backend devuelve { accessToken, user, message }
@@ -125,9 +122,8 @@ const Login = () => {
                 <input
                   type="email"
                   {...register("email")}
-                  className={`block w-full pl-12 bg-gray-50 border-2 ${
-                    errors.email ? "border-nyg-red" : "border-transparent"
-                  } rounded-full py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-nyg-blue sm:text-sm transition-all shadow-inner font-medium`}
+                  className={`block w-full pl-12 bg-gray-50 border-2 ${errors.email ? "border-nyg-red" : "border-transparent"
+                    } rounded-full py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-nyg-blue sm:text-sm transition-all shadow-inner font-medium`}
                   placeholder="admin@nygrugby.com"
                 />
               </div>
@@ -149,9 +145,8 @@ const Login = () => {
                 <input
                   type="password"
                   {...register("password")}
-                  className={`block w-full pl-12 bg-gray-50 border-2 ${
-                    errors.password ? "border-nyg-red" : "border-transparent"
-                  } rounded-full py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-nyg-blue sm:text-sm transition-all shadow-inner font-medium`}
+                  className={`block w-full pl-12 bg-gray-50 border-2 ${errors.password ? "border-nyg-red" : "border-transparent"
+                    } rounded-full py-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-nyg-blue sm:text-sm transition-all shadow-inner font-medium`}
                   placeholder="••••••••"
                 />
               </div>
