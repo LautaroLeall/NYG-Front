@@ -104,21 +104,18 @@ const Fixture = () => {
             ) : (
               upcoming.map((match, idx) => {
                 const isLocal =
-                  match.homeTeam?.name?.toLowerCase().includes("nataci") ||
-                  match.homeTeam?.name?.toLowerCase().includes("gimnasia");
+                  match.homeTeam?.name?.toLowerCase().includes("nataci");
                 const locationText = isLocal ? "Local" : "Visitante";
 
                 return (
                   <Link
                     to={`/rugby/partido/${match._id}`}
                     key={match._id}
-                    className={`flex flex-col md:flex-row items-center border-b border-gray-100 last:border-b-0 p-6 md:p-8 hover:bg-gray-50 transition-colors relative md:border-l-8 
-                  ${idx === 0 ? "md:border-l-nyg-red" : idx === 1 ? "md:border-l-gray-300" : "md:border-l-nyg-blue"}
-                  `}
+                    className={`flex flex-col md:flex-row items-center border-b border-gray-100 last:border-b-0 p-6 md:p-8 hover:bg-gray-50 transition-colors relative md:border-l-8 ${idx === 0 || idx === 1 ? "md:border-l-nyg-red" : idx === 2 ? "md:border-l-gray-300" : "md:border-l-nyg-blue"}`}
                   >
                     {/* Cinta indicadora en móviles */}
                     <div
-                      className={`absolute top-0 left-0 w-full h-2 md:hidden ${idx === 0 ? "bg-nyg-red" : idx === 1 ? "bg-gray-300" : "bg-nyg-blue"}`}
+                      className={`absolute top-0 left-0 w-full h-2 md:hidden ${idx === 0 || idx === 1 ? "bg-nyg-red" : idx === 2 ? "bg-gray-300" : "bg-nyg-blue"}`}
                     ></div>
 
                     {/* Bloque de Fecha */}
@@ -209,11 +206,9 @@ const Fixture = () => {
             ) : (
               results.map((match, idx) => {
                 const isHomeUs =
-                  match.homeTeam?.name?.toLowerCase().includes("nataci") ||
-                  match.homeTeam?.name?.toLowerCase().includes("gimnasia");
+                  match.homeTeam?.name?.toLowerCase().includes("nataci");
                 const isAwayUs =
-                  match.awayTeam?.name?.toLowerCase().includes("nataci") ||
-                  match.awayTeam?.name?.toLowerCase().includes("gimnasia");
+                  match.awayTeam?.name?.toLowerCase().includes("nataci");
                 const won =
                   (isHomeUs && match.homeScore > match.awayScore) ||
                   (isAwayUs && match.awayScore > match.homeScore);
@@ -222,11 +217,11 @@ const Fixture = () => {
                   <Link
                     to={`/rugby/partido/${match._id}`}
                     key={match._id}
-                    className={`flex flex-col md:flex-row items-center border-b border-gray-100 last:border-b-0 p-6 md:p-8 hover:bg-gray-50 transition-colors relative md:border-l-8 ${idx === 0 ? "md:border-l-nyg-red" : idx === 1 ? "md:border-l-gray-300" : "md:border-l-nyg-blue"}`}
+                    className={`flex flex-col md:flex-row items-center border-b border-gray-100 last:border-b-0 p-6 md:p-8 hover:bg-gray-50 transition-colors relative md:border-l-8 ${idx === 0 || idx === 1 ? "md:border-l-nyg-red" : idx === 2 ? "md:border-l-gray-300" : "md:border-l-nyg-blue"}`}
                   >
                     {/* Cinta indicadora en móviles */}
                     <div
-                      className={`absolute top-0 left-0 w-full h-2 md:hidden ${idx === 0 ? "bg-nyg-red" : idx === 1 ? "bg-gray-300" : "bg-nyg-blue"}`}
+                      className={`absolute top-0 left-0 w-full h-2 md:hidden ${idx === 0 || idx === 1 ? "bg-nyg-red" : idx === 2 ? "bg-gray-300" : "bg-nyg-blue"}`}
                     ></div>
 
                     {/* Bloque de Fecha */}
