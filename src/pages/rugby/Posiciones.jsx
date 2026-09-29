@@ -97,11 +97,10 @@ const Posiciones = () => {
               <button
                 key={t._id}
                 onClick={() => setSelectedTournament(t)}
-                className={`px-5 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 ${
-                  selectedTournament?._id === t._id
+                className={`px-5 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 ${selectedTournament?._id === t._id
                     ? "bg-nyg-blue text-white shadow-md"
                     : "bg-transparent text-gray-400 hover:text-nyg-blue hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 {t.name}
               </button>
@@ -204,8 +203,7 @@ const Posiciones = () => {
                 <tbody className="divide-y divide-gray-100">
                   {standings.map((row) => {
                     const isOwn =
-                      row.teamName?.toLowerCase().includes("nataci") ||
-                      row.teamName?.toLowerCase().includes("gimnasia");
+                      row.teamName?.toLowerCase().includes("nataci");
                     return (
                       <tr
                         key={row.teamId}
