@@ -40,7 +40,7 @@ const CATEGORIAS = [
 ];
 
 const NIVELES = ["Regional", "Local", "Nacional", "Amistoso"];
-const DISCIPLINAS = ["Rugby", "Hockey"];
+const DISCIPLINAS = ["Rugby"];
 
 const TournamentForm = () => {
   const { id } = useParams();
@@ -254,29 +254,18 @@ const TournamentForm = () => {
 
             <div>
               <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-2">
-                Disciplina *
+                Disciplina
               </label>
               <div className="relative">
-                <select
-                  {...register("discipline")}
-                  className={`block w-full pl-6 pr-12 py-3 bg-gray-50 border-2 ${errors.discipline ? "border-nyg-red" : "border-transparent"} rounded-full text-gray-800 focus:outline-none focus:bg-white focus:border-nyg-blue transition-all font-medium appearance-none cursor-pointer`}
-                >
-                  <option value="">Seleccionar</option>
-                  {DISCIPLINAS.map((d) => (
-                    <option key={d} value={d}>
-                      {d}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                  <ChevronDown className="h-5 w-5 text-gray-400" />
-                </div>
+                <input
+                  type="text"
+                  readOnly
+                  value="Rugby"
+                  className="block w-full px-6 py-3 bg-gray-100 border-2 border-transparent rounded-full text-gray-500 font-bold cursor-not-allowed select-none"
+                  title="Actualmente solo disponible para Rugby"
+                />
+                <input type="hidden" {...register("discipline")} value="Rugby" />
               </div>
-              {errors.discipline && (
-                <p className="text-xs font-bold text-nyg-red mt-1 ml-2">
-                  {errors.discipline.message}
-                </p>
-              )}
             </div>
           </div>
 
